@@ -4,52 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dorjee — Video Game & Software Developer</title>
-
-    <!-- SEO & Social sharing -->
-    <meta name="description" content="Dorjee Khyber — Video Game & Software Developer specializing in C++, Unity, SDL, Android and iOS. Portfolio of projects and skills.">
+    <meta name="description" content="Dorjee Khyber — Video Game & Software Developer specializing in C++, Unity, SDL, Android and iOS.">
     <meta property="og:title" content="Dorjee — Video Game & Software Developer">
     <meta property="og:description" content="C++ / Unity / SDL developer. Multiplataform: Android, watchOS, iOS, Desktop.">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Dorjee — Video Game & Software Developer">
     <meta name="twitter:description" content="C++ / Unity / SDL developer. Portfolio of games and apps.">
-
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="matrix-bg"></div>
 
-    <!-- Sound toggle button -->
-    <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="Toggle sound">
-        <i class="fas fa-volume-mute" id="sound-icon"></i>
+    <!-- #8 Page loader -->
+    <div id="page-loader" aria-hidden="true" role="presentation">
+        <div class="loader-terminal">
+            <span class="loader-line" id="loader-line"></span>
+            <span class="loader-cursor">█</span>
+        </div>
+    </div>
+
+    <div class="matrix-bg" aria-hidden="true"></div>
+
+    <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()"
+            aria-label="Activar o desactivar sonido" title="Toggle sound">
+        <i class="fas fa-volume-mute" id="sound-icon" aria-hidden="true"></i>
     </button>
 
     <header class="glitch-header">
         <h1 class="glitch" data-text="DORJEE">DORJEE</h1>
-        <p class="subtitle">Video Game & Software Developer</p>
+        <p class="subtitle">Video Game &amp; Software Developer</p>
         <p class="subtitle tagline">C++ · Unity · SDL · Android · iOS</p>
-        <div class="scroll-indicator" onclick="document.querySelector('#about').scrollIntoView({behavior:'smooth'})">
+        <div class="scroll-indicator"
+             onclick="scrollToSection('about')"
+             role="button" tabindex="0"
+             aria-label="Ir a la sección About"
+             onkeydown="if(event.key==='Enter'||event.key===' ')scrollToSection('about')">
             ↓ Scroll
         </div>
     </header>
 
-    <nav class="cyberpunk-nav" id="main-nav">
-        <ul>
-            <li><a href="#about" data-section="about">./about</a></li>
-            <li><a href="#education" data-section="education">./education</a></li>
-            <li><a href="#skills" data-section="skills">./skills</a></li>
-            <li><a href="#projects" data-section="projects">./projects</a></li>
-            <li><a href="#contact" data-section="contact">./contact</a></li>
+    <!-- #9 Nav — uses JS-calculated offset for accurate deep-link scroll -->
+    <nav class="cyberpunk-nav" id="main-nav" aria-label="Navegación principal">
+        <ul role="list">
+            <li><a href="#about"      data-section="about">./about</a></li>
+            <li><a href="#experience" data-section="experience">./experience</a></li>
+            <li><a href="#education"  data-section="education">./education</a></li>
+            <li><a href="#skills"     data-section="skills">./skills</a></li>
+            <li><a href="#projects"   data-section="projects">./projects</a></li>
+            <li><a href="#github"     data-section="github">./github</a></li>
+            <li><a href="#contact"    data-section="contact">./contact</a></li>
         </ul>
     </nav>
 
-    <section id="about" class="section">
+    <!-- ── About ──────────────────────────────────────────────────────────── -->
+    <section id="about" class="section" aria-labelledby="about-title">
+        <h2 id="about-title" class="sr-only">About</h2>
         <div class="terminal">
-            <div class="terminal-header">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
+            <div class="terminal-header" aria-hidden="true">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
             </div>
             <div class="terminal-content">
                 <p class="type-text" data-text="> Iniciando sistema..."></p>
@@ -60,186 +73,219 @@
         </div>
     </section>
 
-    <section id="education" class="section">
-        <h2 class="cyber-title">Education</h2>
+    <!-- ── Experience (#2) ────────────────────────────────────────────────── -->
+    <section id="experience" class="section" aria-labelledby="experience-title">
+        <h2 id="experience-title" class="cyber-title">Experience</h2>
+        <div class="timeline" role="list">
+
+            <article class="timeline-item" role="listitem">
+                <div class="timeline-dot" aria-hidden="true"></div>
+                <div class="timeline-content terminal">
+                    <div class="terminal-header" aria-hidden="true">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <div class="terminal-content">
+                        <div class="exp-header">
+                            <span class="exp-role">&gt; Software Developer — Proyectos Personales</span>
+                            <span class="exp-date">2020 – Present</span>
+                        </div>
+                        <ul class="exp-bullets">
+                            <li>&gt; Diseño y desarrollo de videojuegos en <strong>C++</strong> con <strong>SDL2</strong>: gestión de memoria, sistemas de físicas y render.</li>
+                            <li>&gt; Juegos multiplataforma en <strong>Unity / C#</strong>: sistemas de IA, audio, UI y build pipelines.</li>
+                            <li>&gt; Publicación de apps en <strong>Android</strong> (Java/Kotlin) y <strong>watchOS</strong> (Swift).</li>
+                            <li>&gt; Control de versiones con <strong>Git</strong>, documentación técnica y CI básico.</li>
+                        </ul>
+                        <div class="exp-tags">
+                            <span class="tech-tag">C++</span>
+                            <span class="tech-tag">SDL2</span>
+                            <span class="tech-tag">Unity</span>
+                            <span class="tech-tag">Android</span>
+                            <span class="tech-tag">Swift</span>
+                            <span class="tech-tag">Git</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="timeline-item" role="listitem">
+                <div class="timeline-dot" aria-hidden="true"></div>
+                <div class="timeline-content terminal">
+                    <div class="terminal-header" aria-hidden="true">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <div class="terminal-content">
+                        <div class="exp-header">
+                            <span class="exp-role">&gt; Investigador — Máster en Antropología de América</span>
+                            <span class="exp-date">2020 – 2021</span>
+                        </div>
+                        <ul class="exp-bullets">
+                            <li>&gt; Análisis de datos cualitativos y cuantitativos para investigación académica.</li>
+                            <li>&gt; Redacción de documentación técnica y académica en inglés y español.</li>
+                            <li>&gt; Habilidades transferidas: pensamiento sistémico, narrativa y gestión de proyectos.</li>
+                        </ul>
+                        <div class="exp-tags">
+                            <span class="tech-tag">Investigación</span>
+                            <span class="tech-tag">Análisis de datos</span>
+                            <span class="tech-tag">Documentación</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ── Education ──────────────────────────────────────────────────────── -->
+    <section id="education" class="section" aria-labelledby="education-title">
+        <h2 id="education-title" class="cyber-title">Education</h2>
         <div class="terminal">
-            <div class="terminal-header">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
+            <div class="terminal-header" aria-hidden="true">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
             </div>
             <div class="terminal-content">
                 <div class="education-item">
-                    <p>> Bachelor's Degree in Video Game Development</p>
-                    <p>> Complutense University of Madrid (UCM)</p>
-                    <p>> 2020 - Present</p>
+                    <p>&gt; Bachelor's Degree in Video Game Development</p>
+                    <p>&gt; Complutense University of Madrid (UCM)</p>
+                    <p>&gt; 2020 - Present</p>
                 </div>
                 <div class="education-item">
-                    <p>> Master's Degree in History and Anthropology of America</p>
-                    <p>> Complutense University of Madrid (UCM)</p>
-                    <p>> 2020 - 2021</p>
+                    <p>&gt; Master's Degree in History and Anthropology of America</p>
+                    <p>&gt; Complutense University of Madrid (UCM)</p>
+                    <p>&gt; 2020 - 2021</p>
                 </div>
                 <div class="education-item">
-                    <p>> Bachelor's Degree in Anthropology</p>
-                    <p>> Complutense University of Madrid (UCM)</p>
-                    <p>> 2016 - 2020</p>
+                    <p>&gt; Bachelor's Degree in Anthropology</p>
+                    <p>&gt; Complutense University of Madrid (UCM)</p>
+                    <p>&gt; 2016 - 2020</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="skills" class="section">
-        <h2 class="cyber-title">Skills</h2>
+    <!-- ── Skills ─────────────────────────────────────────────────────────── -->
+    <section id="skills" class="section" aria-labelledby="skills-title">
+        <h2 id="skills-title" class="cyber-title">Skills</h2>
         <div class="skills-container">
             <div class="skill-row">
-                <div class="skill-card">
+                <div class="skill-card" role="article" aria-label="C++ — Avanzado">
                     <div class="skill-header">
-                        <img src="images/cpp-logo.svg" alt="C++ Logo" class="skill-logo" loading="lazy">
+                        <img src="images/cpp-logo.svg" alt="" class="skill-logo" loading="lazy" aria-hidden="true">
                         <h3>C++</h3>
                     </div>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="advanced">
-                            <span class="level-label">Avanzado</span>
-                        </div>
+                    <div class="skill-level-indicator" aria-label="Nivel Avanzado">
+                        <div class="level-bar" data-level="advanced"><span class="level-label" aria-hidden="true">Avanzado</span></div>
                     </div>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" role="article" aria-label="C# — Avanzado">
                     <div class="skill-header">
-                        <img src="images/csharp-logo.svg" alt="C# Logo" class="skill-logo" loading="lazy">
+                        <img src="images/csharp-logo.svg" alt="" class="skill-logo" loading="lazy" aria-hidden="true">
                         <h3>C#</h3>
                     </div>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="advanced">
-                            <span class="level-label">Avanzado</span>
-                        </div>
+                    <div class="skill-level-indicator" aria-label="Nivel Avanzado">
+                        <div class="level-bar" data-level="advanced"><span class="level-label" aria-hidden="true">Avanzado</span></div>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <i class="skill-icon">C</i>
+                <div class="skill-card" role="article" aria-label="C — Intermedio">
+                    <i class="skill-icon" aria-hidden="true">C</i>
                     <h3>C</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="intermediate">
-                            <span class="level-label">Intermedio</span>
-                        </div>
+                    <div class="skill-level-indicator" aria-label="Nivel Intermedio">
+                        <div class="level-bar" data-level="intermediate"><span class="level-label" aria-hidden="true">Intermedio</span></div>
                     </div>
                 </div>
             </div>
             <div class="skill-row">
-                <div class="skill-card">
-                    <i class="fab fa-python"></i>
-                    <h3>Python</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="intermediate">
-                            <span class="level-label">Intermedio</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="Python — Intermedio">
+                    <i class="fab fa-python" aria-hidden="true"></i><h3>Python</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Intermedio">
+                        <div class="level-bar" data-level="intermediate"><span class="level-label" aria-hidden="true">Intermedio</span></div>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <i class="fab fa-js"></i>
-                    <h3>JavaScript</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="intermediate">
-                            <span class="level-label">Intermedio</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="JavaScript — Intermedio">
+                    <i class="fab fa-js" aria-hidden="true"></i><h3>JavaScript</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Intermedio">
+                        <div class="level-bar" data-level="intermediate"><span class="level-label" aria-hidden="true">Intermedio</span></div>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <i class="fab fa-html5"></i>
-                    <h3>HTML</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="advanced">
-                            <span class="level-label">Avanzado</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="HTML — Avanzado">
+                    <i class="fab fa-html5" aria-hidden="true"></i><h3>HTML</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Avanzado">
+                        <div class="level-bar" data-level="advanced"><span class="level-label" aria-hidden="true">Avanzado</span></div>
                     </div>
                 </div>
             </div>
             <div class="skill-row">
-                <div class="skill-card">
-                    <i class="fab fa-css3-alt"></i>
-                    <h3>CSS</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="intermediate">
-                            <span class="level-label">Intermedio</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="CSS — Intermedio">
+                    <i class="fab fa-css3-alt" aria-hidden="true"></i><h3>CSS</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Intermedio">
+                        <div class="level-bar" data-level="intermediate"><span class="level-label" aria-hidden="true">Intermedio</span></div>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <i class="fab fa-unity"></i>
-                    <h3>Unity</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="expert">
-                            <span class="level-label">Experto</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="Unity — Experto">
+                    <i class="fab fa-unity" aria-hidden="true"></i><h3>Unity</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Experto">
+                        <div class="level-bar" data-level="expert"><span class="level-label" aria-hidden="true">Experto</span></div>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <i class="fas fa-gamepad"></i>
-                    <h3>SDL</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="advanced">
-                            <span class="level-label">Avanzado</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="SDL — Avanzado">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i><h3>SDL</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Avanzado">
+                        <div class="level-bar" data-level="advanced"><span class="level-label" aria-hidden="true">Avanzado</span></div>
                     </div>
                 </div>
             </div>
             <div class="skill-row">
-                <div class="skill-card">
-                    <i class="fab fa-java"></i>
-                    <h3>Java</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="advanced">
-                            <span class="level-label">Avanzado</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="Java — Avanzado">
+                    <i class="fab fa-java" aria-hidden="true"></i><h3>Java</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Avanzado">
+                        <div class="level-bar" data-level="advanced"><span class="level-label" aria-hidden="true">Avanzado</span></div>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <i class="fab fa-android"></i>
-                    <h3>Kotlin</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="intermediate">
-                            <span class="level-label">Intermedio</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="Kotlin — Intermedio">
+                    <i class="fab fa-android" aria-hidden="true"></i><h3>Kotlin</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Intermedio">
+                        <div class="level-bar" data-level="intermediate"><span class="level-label" aria-hidden="true">Intermedio</span></div>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <i class="fab fa-apple"></i>
-                    <h3>Swift</h3>
-                    <div class="skill-level-indicator">
-                        <div class="level-bar" data-level="basic">
-                            <span class="level-label">Básico</span>
-                        </div>
+                <div class="skill-card" role="article" aria-label="Swift — Básico">
+                    <i class="fab fa-apple" aria-hidden="true"></i><h3>Swift</h3>
+                    <div class="skill-level-indicator" aria-label="Nivel Básico">
+                        <div class="level-bar" data-level="basic"><span class="level-label" aria-hidden="true">Básico</span></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="projects" class="section">
-        <h2 class="cyber-title">Proyectos</h2>
+    <!-- ── Projects ───────────────────────────────────────────────────────── -->
+    <section id="projects" class="section" aria-labelledby="projects-title">
+        <h2 id="projects-title" class="cyber-title">Proyectos</h2>
         <div class="project-grid">
 
             <div class="project-card">
                 <div class="project-header">
                     <h3>ManageYourLife <span class="platform-tag">Android</span></h3>
                     <div class="project-actions">
-                        <button class="toggle-project" onclick="toggleProject('manageyourlife')" aria-label="Expand project">
-                            <i class="fas fa-chevron-down"></i>
+                        <button class="toggle-project" onclick="toggleProject('manageyourlife')"
+                                aria-expanded="false" aria-controls="manageyourlife-content"
+                                aria-label="Expandir ManageYourLife">
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/manageyourlife" target="_blank" class="github-link" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
+                        <a href="https://github.com/Dorjeekhb/manageyourlife" target="_blank"
+                           rel="noopener noreferrer" class="github-link"
+                           aria-label="Ver ManageYourLife en GitHub (abre en pestaña nueva)">
+                            <i class="fab fa-github" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
                 <p class="project-summary">App de gestión de tareas con etiquetas, prioridades y búsqueda por fecha.</p>
-                <div class="project-content" id="manageyourlife-content">
+                <div class="project-content" id="manageyourlife-content" aria-label="Detalles">
                     <div class="tech-stack">
-                        <span class="tech-tag">Java</span>
-                        <span class="tech-tag">Android Studio</span>
+                        <span class="tech-tag">Java</span><span class="tech-tag">Android Studio</span>
                     </div>
-                    <div class="project-gallery" id="manageyourlife-gallery">
-                        <img src="images/2.png" alt="ManageYourLife screenshot 1" loading="lazy">
-                        <img src="images/3.png" alt="ManageYourLife screenshot 2" loading="lazy">
-                        <img src="images/1.png" alt="ManageYourLife screenshot 3" loading="lazy">
+                    <div class="project-gallery">
+                        <img src="images/2.png" alt="Pantalla principal con lista de tareas" loading="lazy">
+                        <img src="images/3.png" alt="Tarea con etiquetas y nivel de prioridad" loading="lazy">
+                        <img src="images/1.png" alt="Filtro de búsqueda por fecha" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -248,28 +294,31 @@
                 <div class="project-header">
                     <h3>WhatToWatch <span class="platform-tag">watchOS</span></h3>
                     <div class="project-actions">
-                        <button class="toggle-project" onclick="toggleProject('whattowatch')" aria-label="Expand project">
-                            <i class="fas fa-chevron-down"></i>
+                        <button class="toggle-project" onclick="toggleProject('whattowatch')"
+                                aria-expanded="false" aria-controls="whattowatch-content"
+                                aria-label="Expandir WhatToWatch">
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/whattowatch" target="_blank" class="github-link" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
+                        <a href="https://github.com/Dorjeekhb/whattowatch" target="_blank"
+                           rel="noopener noreferrer" class="github-link"
+                           aria-label="Ver WhatToWatch en GitHub (abre en pestaña nueva)">
+                            <i class="fab fa-github" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
                 <p class="project-summary">App para watchOS que recomienda series o películas diarias, con sinopsis, duración y plataforma de streaming.</p>
-                <div class="project-content" id="whattowatch-content">
+                <div class="project-content" id="whattowatch-content" aria-label="Detalles">
                     <div class="tech-stack">
-                        <span class="tech-tag">Swift</span>
-                        <span class="tech-tag">watchOS</span>
+                        <span class="tech-tag">Swift</span><span class="tech-tag">watchOS</span>
                     </div>
-                    <div class="project-gallery" id="whattowatch-gallery">
-                        <img src="images/4.png" alt="WhatToWatch screenshot 1" loading="lazy">
-                        <img src="images/5.png" alt="WhatToWatch screenshot 2" loading="lazy">
-                        <img src="images/6.png" alt="WhatToWatch screenshot 3" loading="lazy">
-                        <img src="images/7.png" alt="WhatToWatch screenshot 4" loading="lazy">
-                        <img src="images/12.png" alt="WhatToWatch screenshot 5" loading="lazy">
-                        <img src="images/22.png" alt="WhatToWatch screenshot 6" loading="lazy">
-                        <img src="images/32.png" alt="WhatToWatch screenshot 7" loading="lazy">
+                    <div class="project-gallery">
+                        <img src="images/4.png"  alt="Recomendación diaria en Apple Watch" loading="lazy">
+                        <img src="images/5.png"  alt="Detalle de película con sinopsis" loading="lazy">
+                        <img src="images/6.png"  alt="Duración y plataforma de streaming" loading="lazy">
+                        <img src="images/7.png"  alt="Pantalla de ajustes de la app" loading="lazy">
+                        <img src="images/12.png" alt="Lista de contenidos guardados" loading="lazy">
+                        <img src="images/22.png" alt="Series recomendadas" loading="lazy">
+                        <img src="images/32.png" alt="Pantalla de bienvenida" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -278,26 +327,29 @@
                 <div class="project-header">
                     <h3>Bubble Adventure <span class="platform-tag">Android</span></h3>
                     <div class="project-actions">
-                        <button class="toggle-project" onclick="toggleProject('bubbleadventure')" aria-label="Expand project">
-                            <i class="fas fa-chevron-down"></i>
+                        <button class="toggle-project" onclick="toggleProject('bubbleadventure')"
+                                aria-expanded="false" aria-controls="bubbleadventure-content"
+                                aria-label="Expandir Bubble Adventure">
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/BubbleAdventure" target="_blank" class="github-link" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
+                        <a href="https://github.com/Dorjeekhb/BubbleAdventure" target="_blank"
+                           rel="noopener noreferrer" class="github-link"
+                           aria-label="Ver Bubble Adventure en GitHub (abre en pestaña nueva)">
+                            <i class="fab fa-github" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
                 <p class="project-summary">Juego tipo Puzzle Bobble en Android Studio. Dispara burbujas, combina colores y completa niveles con efectos animados.</p>
-                <div class="project-content" id="bubbleadventure-content">
+                <div class="project-content" id="bubbleadventure-content" aria-label="Detalles">
                     <div class="tech-stack">
-                        <span class="tech-tag">Java</span>
-                        <span class="tech-tag">Android Studio</span>
+                        <span class="tech-tag">Java</span><span class="tech-tag">Android Studio</span>
                     </div>
-                    <div class="project-gallery" id="bubbleadventure-gallery">
-                        <img src="images/pb1.png" alt="Bubble Adventure screenshot 1" loading="lazy">
-                        <img src="images/pb2.png" alt="Bubble Adventure screenshot 2" loading="lazy">
-                        <img src="images/pb3.png" alt="Bubble Adventure screenshot 3" loading="lazy">
-                        <img src="images/pb4.png" alt="Bubble Adventure screenshot 4" loading="lazy">
-                        <img src="images/pb5.png" alt="Bubble Adventure screenshot 5" loading="lazy">
+                    <div class="project-gallery">
+                        <img src="images/pb1.png" alt="Pantalla de título de Bubble Adventure" loading="lazy">
+                        <img src="images/pb2.png" alt="Gameplay con burbujas de colores" loading="lazy">
+                        <img src="images/pb3.png" alt="Combo de burbujas explotando" loading="lazy">
+                        <img src="images/pb4.png" alt="Pantalla de nivel completado" loading="lazy">
+                        <img src="images/pb5.png" alt="Selección de niveles" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -305,41 +357,68 @@
         </div>
     </section>
 
-    <section id="contact" class="section">
-        <h2 class="cyber-title">Contacto</h2>
+    <!-- ── GitHub Stats (#12) ─────────────────────────────────────────────── -->
+    <section id="github" class="section" aria-labelledby="github-title" aria-live="polite">
+        <h2 id="github-title" class="cyber-title">GitHub Activity</h2>
+        <div class="terminal github-terminal">
+            <div class="terminal-header" aria-hidden="true">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            </div>
+            <div class="terminal-content">
+                <p class="type-text" data-text="> Conectando a api.github.com..."></p>
+                <div id="github-stats-container" class="github-stats-grid" aria-label="Estadísticas">
+                    <div class="github-stat-card skeleton" aria-hidden="true"></div>
+                    <div class="github-stat-card skeleton" aria-hidden="true"></div>
+                    <div class="github-stat-card skeleton" aria-hidden="true"></div>
+                    <div class="github-stat-card skeleton" aria-hidden="true"></div>
+                </div>
+                <div id="github-langs" class="github-langs" aria-label="Lenguajes más usados"></div>
+                <div id="github-repos" class="github-repos-list" aria-label="Repositorios destacados"></div>
+                <p class="github-link-row">
+                    <a href="https://github.com/Dorjeekhb" target="_blank" rel="noopener noreferrer"
+                       class="cv-button" style="display:inline-flex;margin-top:1.5rem;">
+                        <i class="fab fa-github" aria-hidden="true"></i> Ver perfil completo
+                    </a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Contact ────────────────────────────────────────────────────────── -->
+    <section id="contact" class="section" aria-labelledby="contact-title">
+        <h2 id="contact-title" class="cyber-title">Contacto</h2>
         <div class="terminal contact-terminal">
-            <div class="terminal-header">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
+            <div class="terminal-header" aria-hidden="true">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
             </div>
             <div class="terminal-content">
                 <p class="type-text" data-text="> Iniciando protocolos de comunicación..."></p>
                 <div class="contact-container">
-                    <a href="https://github.com/Dorjeekhb" target="_blank" class="social-link">
-                        <i class="fab fa-github"></i>
-                        <span class="social-tooltip">GitHub</span>
+                    <a href="https://github.com/Dorjeekhb" target="_blank" rel="noopener noreferrer"
+                       class="social-link" aria-label="GitHub de Dorjee (abre en pestaña nueva)">
+                        <i class="fab fa-github" aria-hidden="true"></i>
+                        <span class="social-tooltip" aria-hidden="true">GitHub</span>
                     </a>
-                    <a href="https://www.linkedin.com/in/dorjee-khyber/" target="_blank" class="social-link">
-                        <i class="fab fa-linkedin"></i>
-                        <span class="social-tooltip">LinkedIn</span>
+                    <a href="https://www.linkedin.com/in/dorjee-khyber/" target="_blank" rel="noopener noreferrer"
+                       class="social-link" aria-label="LinkedIn de Dorjee (abre en pestaña nueva)">
+                        <i class="fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="social-tooltip" aria-hidden="true">LinkedIn</span>
                     </a>
-                    <a href="https://twitter.com/DorjeeKhyber" target="_blank" class="social-link">
-                        <i class="fab fa-x-twitter"></i>
-                        <span class="social-tooltip">X (Twitter)</span>
+                    <a href="https://twitter.com/DorjeeKhyber" target="_blank" rel="noopener noreferrer"
+                       class="social-link" aria-label="X Twitter de Dorjee (abre en pestaña nueva)">
+                        <i class="fab fa-x-twitter" aria-hidden="true"></i>
+                        <span class="social-tooltip" aria-hidden="true">X (Twitter)</span>
                     </a>
                 </div>
                 <p class="type-text contact-email" data-text="> root@dorjee:~$"></p>
                 <div class="cv-download">
                     <p class="type-text" data-text="> Descargar CV / Download CV:"></p>
                     <div class="cv-buttons">
-                        <a href="cves.pdf" class="cv-button" download>
-                            <i class="fas fa-file-download"></i>
-                            CV en Español
+                        <a href="cves.pdf" class="cv-button" download aria-label="Descargar CV en Español">
+                            <i class="fas fa-file-download" aria-hidden="true"></i> CV en Español
                         </a>
-                        <a href="cveng.pdf" class="cv-button" download>
-                            <i class="fas fa-file-download"></i>
-                            CV in English
+                        <a href="cveng.pdf" class="cv-button" download aria-label="Download CV in English">
+                            <i class="fas fa-file-download" aria-hidden="true"></i> CV in English
                         </a>
                     </div>
                 </div>
@@ -347,7 +426,6 @@
         </div>
     </section>
 
-    <!-- Audio Elements — loaded only after user interaction -->
     <audio id="bg-music" preload="none" loop></audio>
     <audio id="click-sound" preload="none"></audio>
     <audio id="key-sound" preload="none"></audio>
