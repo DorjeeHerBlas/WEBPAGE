@@ -1,4 +1,4 @@
-// Matrix Background Effect
+// ─── Matrix Background Effect ───────────────────────────────────────────────
 function createMatrixBackground() {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -13,24 +13,26 @@ function createMatrixBackground() {
     const alphabet = katakana + latin + nums;
 
     const fontSize = 16;
-    const columns = canvas.width / fontSize;
+    let columns = canvas.width / fontSize;
+    let rainDrops = [];
 
-    const rainDrops = [];
-    for (let x = 0; x < columns; x++) {
-        rainDrops[x] = 1;
+    function initDrops() {
+        rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
     }
+    initDrops();
 
     function draw() {
         context.fillStyle = 'rgba(0, 0, 0, 0.05)';
         context.fillRect(0, 0, canvas.width, canvas.height);
-
         context.fillStyle = '#0F0';
         context.font = fontSize + 'px monospace';
 
         for (let i = 0; i < rainDrops.length; i++) {
             const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
             context.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
             if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                 rainDrops[i] = 0;
             }
@@ -43,145 +45,182 @@ function createMatrixBackground() {
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        columns = canvas.width / fontSize;
+        initDrops();
     });
 }
 
-// Typing Effect
+// ─── Real Typewriter Effect ──────────────────────────────────────────────────
+// Each .type-text element must have a data-text attribute with the target string.
 function typeWriterEffect() {
-    const texts = document.querySelectorAll('.type-text');
-    texts.forEach((text, index) => {
-        text.style.animationDelay = `${index * 1}s`;
+    const elements = document.querySelectorAll('.type-text');
+
+    elements.forEach((el, index) => {
+        const fullText = el.getAttribute('data-text') || '';
+        el.textContent = '';
+        el.style.opacity = '1'; // visible from the start, we build content char by char
+
+        let charIndex = 0;
+        const baseDelay = index * 600; // stagger each line
+
+        setTimeout(() => {
+            const interval = setInterval(() => {
+                if (charIndex < fullText.length) {
+                    el.textContent += fullText[charIndex];
+                    charIndex++;
+                    playKey();
+                } else {
+                    clearInterval(interval);
+                }
+            }, 35);
+        }, baseDelay);
     });
 }
 
-// Smooth Scrolling
+// ─── Smooth Scrolling ────────────────────────────────────────────────────────
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             playClick();
-            
+
             const targetId = this.getAttribute('href');
             const target = document.querySelector(targetId);
-            
-            // Ajuste especial para about y education
+            if (!target) return;
+
             const offset = (targetId === '#about' || targetId === '#education') ? 20 : 80;
-            
             const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-            
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
+
+            window.scrollTo({ top: targetPosition, behavior: 'smooth' });
         });
     });
 }
 
-// Scroll Reveal Effect
-function initScrollReveal() {
+// ─── Active Nav Highlight ────────────────────────────────────────────────────
+function initActiveNav() {
     const sections = document.querySelectorAll('.section');
-    
+    const navLinks = document.querySelectorAll('.cyberpunk-nav a[data-section]');
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = 1;
-                entry.target.style.transform = 'translateY(0)';
+                const id = entry.target.id;
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('data-section') === id);
+                });
             }
         });
     }, {
-        threshold: 0.1
+        threshold: 0.3,
+        rootMargin: '-60px 0px -40% 0px'
     });
 
-    sections.forEach(section => {
-        section.style.opacity = 0;
-        section.style.transform = 'translateY(20px)';
-        section.style.transition = 'all 0.6s ease-out';
-        observer.observe(section);
-    });
+    sections.forEach(section => observer.observe(section));
 }
 
-// Sound Effects
-let soundEnabled = true;
+// ─── Scroll Reveal ───────────────────────────────────────────────────────────
+function handleSectionVisibility() {
+    const sections = document.querySelectorAll('.section');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+
+                // Animate skill cards + bars when skills section becomes visible
+                if (entry.target.id === 'skills') {
+                    entry.target.querySelectorAll('.skill-card').forEach((card, index) => {
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                            // Trigger bar animation by adding .animated class
+                            const bar = card.querySelector('.level-bar');
+                            if (bar) bar.classList.add('animated');
+                        }, index * 80);
+                    });
+                }
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px'
+    });
+
+    sections.forEach(section => observer.observe(section));
+}
+
+// ─── Sound Effects ────────────────────────────────────────────────────────────
+// Sound is OFF by default — only activates after user explicitly enables it.
+let soundEnabled = false;
+let audioLoaded = false;
+
+const AUDIO_SOURCES = {
+    'bg-music': 'https://cdn.pixabay.com/audio/2023/10/29/14-16-19-672_200x200.mp3',
+    'click-sound': 'https://cdn.pixabay.com/audio/2022/05/13/16-35-43-54_200x200.mp3',
+    'key-sound': 'https://cdn.pixabay.com/audio/2022/08/02/00-15-02-598_200x200.mp3',
+    'nav-hover-sound': 'https://cdn.pixabay.com/audio/2022/03/10/15-43-24-182_200x200.mp3'
+};
+
+function loadAudio() {
+    if (audioLoaded) return;
+    audioLoaded = true;
+    Object.entries(AUDIO_SOURCES).forEach(([id, src]) => {
+        const el = document.getElementById(id);
+        if (el) el.src = src;
+    });
+}
 
 function playSound(audioId) {
     if (!soundEnabled) return;
     const audio = document.getElementById(audioId);
-    if (audio) {
+    if (audio && audio.src) {
         audio.currentTime = 0;
-        audio.play();
+        audio.play().catch(() => {}); // silence AbortError on rapid triggers
     }
 }
 
-function playClick() {
-    playSound('click-sound');
-}
-
-function playKey() {
-    playSound('key-sound');
-}
-
-function playNavHover() {
-    playSound('nav-hover-sound');
-}
+function playClick() { playSound('click-sound'); }
+function playKey() { /* intentionally silent during typing — avoid spam */ }
+function playNavHover() { playSound('nav-hover-sound'); }
 
 function toggleSound() {
+    loadAudio(); // load sources on first interaction
+
     soundEnabled = !soundEnabled;
     const bgMusic = document.getElementById('bg-music');
+    const icon = document.getElementById('sound-icon');
+
     if (soundEnabled) {
-        bgMusic.play();
+        bgMusic.play().catch(() => {});
+        if (icon) { icon.classList.remove('fa-volume-mute'); icon.classList.add('fa-volume-up'); }
     } else {
         bgMusic.pause();
+        if (icon) { icon.classList.remove('fa-volume-up'); icon.classList.add('fa-volume-mute'); }
     }
 }
 
-// Project Details
+// ─── Project Toggle ───────────────────────────────────────────────────────────
 function toggleProject(projectId) {
     playClick();
     const content = document.getElementById(`${projectId}-content`);
     const button = document.querySelector(`[onclick="toggleProject('${projectId}')"]`);
     const wasExpanded = content.classList.contains('expanded');
 
-    // Primero desactivamos las transiciones
-    document.querySelectorAll('.project-content').forEach(item => {
-        item.style.transition = 'none';
-    });
+    // Close all first
+    document.querySelectorAll('.project-content').forEach(item => item.classList.remove('expanded'));
+    document.querySelectorAll('.toggle-project').forEach(btn => btn.classList.remove('expanded'));
 
-    // Forzamos un reflow
-    void document.documentElement.offsetHeight;
-
-    // Cerramos todos los proyectos
-    document.querySelectorAll('.project-content').forEach(item => {
-        item.classList.remove('expanded');
-    });
-    document.querySelectorAll('.toggle-project').forEach(btn => {
-        btn.classList.remove('expanded');
-    });
-
-    // Reactivamos las transiciones
-    setTimeout(() => {
-        document.querySelectorAll('.project-content').forEach(item => {
-            item.style.transition = '';
-        });
-    }, 0);
-
-    // Solo expandimos si no estaba expandido anteriormente
     if (!wasExpanded) {
         content.classList.add('expanded');
         button.classList.add('expanded');
-        
-        // Scroll suave hacia el proyecto
+
         requestAnimationFrame(() => {
             content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         });
-    }
 
-    // Add click listeners to images for full-screen view
-    if (content.classList.contains('expanded')) {
-        const images = content.querySelectorAll('.project-gallery img');
-        images.forEach(img => {
-            img.onclick = function() {
-                showFullscreenImage(this.src);
-            }
+        // Attach fullscreen click to images
+        content.querySelectorAll('.project-gallery img').forEach(img => {
+            img.onclick = function () { showFullscreenImage(this.src); };
         });
     }
 }
@@ -203,87 +242,25 @@ function showFullscreenImage(src) {
     };
 
     overlay.querySelector('.close-fullscreen').onclick = close;
-    overlay.onclick = (e) => {
-        if (e.target === overlay) close();
-    };
+    overlay.onclick = (e) => { if (e.target === overlay) close(); };
 
-    // Add ESC key listener
     const escListener = (e) => {
-        if (e.key === 'Escape') {
-            close();
-            document.removeEventListener('keydown', escListener);
-        }
+        if (e.key === 'Escape') { close(); document.removeEventListener('keydown', escListener); }
     };
     document.addEventListener('keydown', escListener);
 }
 
-// Función para manejar la visibilidad de las secciones
-function handleSectionVisibility() {
-    const sections = document.querySelectorAll('.section');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-
-                // Animate skill bars when they become visible
-                if (entry.target.id === 'skills') {
-                    entry.target.querySelectorAll('.skill-card').forEach((card, index) => {
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                            const bar = card.querySelector('.level-bar');
-                            if (bar) {
-                                const width = bar.style.width;
-                                bar.style.width = '0';
-                                setTimeout(() => {
-                                    bar.style.width = width;
-                                }, 100);
-                            }
-                        }, index * 200);
-                    });
-                }
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px'
-    });
-
-    sections.forEach(section => observer.observe(section));
-}
-
-// Initialize everything when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    createMatrixBackground();
-    typeWriterEffect();
-    initSmoothScroll();
-    handleSectionVisibility();
-    initCursorTrail();
-
-    // Initialize audio elements
-    document.querySelectorAll('audio').forEach(audio => {
-        const src = audio.getAttribute('data-src');
-        if (src) {
-            audio.src = src;
-        }
-    });
-
-    // Add hover sound effects
-    document.querySelectorAll('a, button').forEach(element => {
-        element.addEventListener('mouseenter', playNavHover);
-    });
-});
-
-// Cursor trail effect
+// ─── Cursor Trail ─────────────────────────────────────────────────────────────
 function initCursorTrail() {
+    // Skip on touch devices
+    if (window.matchMedia('(hover: none)').matches) return;
+
     const cursor = document.createElement('div');
     cursor.className = 'cursor-trail';
     document.body.appendChild(cursor);
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
 
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
@@ -291,17 +268,26 @@ function initCursorTrail() {
     });
 
     function animate() {
-        const dx = mouseX - cursorX;
-        const dy = mouseY - cursorY;
-
-        cursorX += dx * 0.1;
-        cursorY += dy * 0.1;
-
+        cursorX += (mouseX - cursorX) * 0.1;
+        cursorY += (mouseY - cursorY) * 0.1;
         cursor.style.left = cursorX + 'px';
         cursor.style.top = cursorY + 'px';
-
         requestAnimationFrame(animate);
     }
-
     animate();
 }
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    createMatrixBackground();
+    initSmoothScroll();
+    initActiveNav();
+    handleSectionVisibility();
+    initCursorTrail();
+    typeWriterEffect();
+
+    // Hover sound on interactive elements
+    document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', playNavHover);
+    });
+});
