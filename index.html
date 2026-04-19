@@ -3,31 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dorjee NormonCorp</title>
+    <title>Dorjee — Video Game & Software Developer</title>
+
+    <!-- SEO & Social sharing -->
+    <meta name="description" content="Dorjee Khyber — Video Game & Software Developer specializing in C++, Unity, SDL, Android and iOS. Portfolio of projects and skills.">
+    <meta property="og:title" content="Dorjee — Video Game & Software Developer">
+    <meta property="og:description" content="C++ / Unity / SDL developer. Multiplataform: Android, watchOS, iOS, Desktop.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Dorjee — Video Game & Software Developer">
+    <meta name="twitter:description" content="C++ / Unity / SDL developer. Portfolio of games and apps.">
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="matrix-bg"></div>
-<header class="glitch-header">
-    <h1 class="glitch" data-text="DORJEE">DORJEE</h1>
-    <p class="subtitle">Video Game & Software Developer</p>
-    <p class="subtitle tagline">"Mess with the best, die like the rest"</p>
 
-   <div class="scroll-indicator" onclick="document.querySelector('#about').scrollIntoView({behavior:'smooth'})">
-    ↓ Scroll
-</div>
-</header>
+    <!-- Sound toggle button -->
+    <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="Toggle sound">
+        <i class="fas fa-volume-mute" id="sound-icon"></i>
+    </button>
 
+    <header class="glitch-header">
+        <h1 class="glitch" data-text="DORJEE">DORJEE</h1>
+        <p class="subtitle">Video Game & Software Developer</p>
+        <p class="subtitle tagline">C++ · Unity · SDL · Android · iOS</p>
+        <div class="scroll-indicator" onclick="document.querySelector('#about').scrollIntoView({behavior:'smooth'})">
+            ↓ Scroll
+        </div>
+    </header>
 
-
-    <nav class="cyberpunk-nav">
+    <nav class="cyberpunk-nav" id="main-nav">
         <ul>
-            <li><a href="#about">./about</a></li>
-            <li><a href="#education">./education</a></li>
-            <li><a href="#skills">./skills</a></li>
-            <li><a href="#projects">./projects</a></li>
-            <li><a href="#contact">./contact</a></li>
+            <li><a href="#about" data-section="about">./about</a></li>
+            <li><a href="#education" data-section="education">./education</a></li>
+            <li><a href="#skills" data-section="skills">./skills</a></li>
+            <li><a href="#projects" data-section="projects">./projects</a></li>
+            <li><a href="#contact" data-section="contact">./contact</a></li>
         </ul>
     </nav>
 
@@ -39,46 +52,41 @@
                 <span class="dot green"></span>
             </div>
             <div class="terminal-content">
-                <p class="type-text">> Iniciando sistema...</p>
-                <p class="type-text">> Cargando perfil: DORJEE</p>
-                <p class="type-text">> Desarrollador de Videojuegos (C++ / Unity / SDL)</p>
-                <p class="type-text">> Programación multiplataforma: Android, watchOS, iOS, Desktop</p>
+                <p class="type-text" data-text="> Iniciando sistema..."></p>
+                <p class="type-text" data-text="> Cargando perfil: DORJEE"></p>
+                <p class="type-text" data-text="> Desarrollador de Videojuegos (C++ / Unity / SDL)"></p>
+                <p class="type-text" data-text="> Programación multiplataforma: Android, watchOS, iOS, Desktop"></p>
             </div>
         </div>
     </section>
 
     <section id="education" class="section">
-    <!-- Education section title -->
-    <h2 class="cyber-title">Education</h2>
-
-    <div class="terminal">
-        <div class="terminal-header">
-            <!-- Terminal window control dots -->
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-        </div>
-
-        <div class="terminal-content">
-            <div class="education-item">
-                <p>> Bachelor's Degree in Video Game Development</p>
-                <p>> Complutense University of Madrid (UCM)</p>
-                <p>> 2020 - Present</p>
+        <h2 class="cyber-title">Education</h2>
+        <div class="terminal">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
             </div>
-            <div class="education-item">
-                <p>> Master's Degree in History and Anthropology of America</p>
-                <p>> Complutense University of Madrid (UCM)</p>
-                <p>> 2020 - 2021</p>
-            </div>
-            <div class="education-item">
-                <p>> Bachelor's Degree in Anthropology</p>
-                <p>> Complutense University of Madrid (UCM)</p>
-                <p>> 2016 - 2020</p>
+            <div class="terminal-content">
+                <div class="education-item">
+                    <p>> Bachelor's Degree in Video Game Development</p>
+                    <p>> Complutense University of Madrid (UCM)</p>
+                    <p>> 2020 - Present</p>
+                </div>
+                <div class="education-item">
+                    <p>> Master's Degree in History and Anthropology of America</p>
+                    <p>> Complutense University of Madrid (UCM)</p>
+                    <p>> 2020 - 2021</p>
+                </div>
+                <div class="education-item">
+                    <p>> Bachelor's Degree in Anthropology</p>
+                    <p>> Complutense University of Madrid (UCM)</p>
+                    <p>> 2016 - 2020</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
 
     <section id="skills" class="section">
         <h2 class="cyber-title">Skills</h2>
@@ -86,27 +94,33 @@
             <div class="skill-row">
                 <div class="skill-card">
                     <div class="skill-header">
-                        <img src="images/cpp-logo.svg" alt="C++ Logo" class="skill-logo">
+                        <img src="images/cpp-logo.svg" alt="C++ Logo" class="skill-logo" loading="lazy">
                         <h3>C++</h3>
                     </div>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 90%"></div>
+                        <div class="level-bar" data-level="advanced">
+                            <span class="level-label">Avanzado</span>
+                        </div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <div class="skill-header">
-                        <img src="images/csharp-logo.svg" alt="C# Logo" class="skill-logo">
+                        <img src="images/csharp-logo.svg" alt="C# Logo" class="skill-logo" loading="lazy">
                         <h3>C#</h3>
                     </div>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 85%"></div>
+                        <div class="level-bar" data-level="advanced">
+                            <span class="level-label">Avanzado</span>
+                        </div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <i class="skill-icon">C</i>
                     <h3>C</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 60%"></div>
+                        <div class="level-bar" data-level="intermediate">
+                            <span class="level-label">Intermedio</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,21 +129,27 @@
                     <i class="fab fa-python"></i>
                     <h3>Python</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 60%"></div>
+                        <div class="level-bar" data-level="intermediate">
+                            <span class="level-label">Intermedio</span>
+                        </div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <i class="fab fa-js"></i>
                     <h3>JavaScript</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 75%"></div>
+                        <div class="level-bar" data-level="intermediate">
+                            <span class="level-label">Intermedio</span>
+                        </div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <i class="fab fa-html5"></i>
                     <h3>HTML</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 80%"></div>
+                        <div class="level-bar" data-level="advanced">
+                            <span class="level-label">Avanzado</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -138,21 +158,27 @@
                     <i class="fab fa-css3-alt"></i>
                     <h3>CSS</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 70%"></div>
+                        <div class="level-bar" data-level="intermediate">
+                            <span class="level-label">Intermedio</span>
+                        </div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <i class="fab fa-unity"></i>
                     <h3>Unity</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 95%"></div>
+                        <div class="level-bar" data-level="expert">
+                            <span class="level-label">Experto</span>
+                        </div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <i class="fas fa-gamepad"></i>
                     <h3>SDL</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 85%"></div>
+                        <div class="level-bar" data-level="advanced">
+                            <span class="level-label">Avanzado</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -161,21 +187,27 @@
                     <i class="fab fa-java"></i>
                     <h3>Java</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 85%"></div>
+                        <div class="level-bar" data-level="advanced">
+                            <span class="level-label">Avanzado</span>
+                        </div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <i class="fab fa-android"></i>
                     <h3>Kotlin</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 65%"></div>
+                        <div class="level-bar" data-level="intermediate">
+                            <span class="level-label">Intermedio</span>
+                        </div>
                     </div>
                 </div>
                 <div class="skill-card">
                     <i class="fab fa-apple"></i>
                     <h3>Swift</h3>
                     <div class="skill-level-indicator">
-                        <div class="level-bar" style="width: 45%"></div>
+                        <div class="level-bar" data-level="basic">
+                            <span class="level-label">Básico</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -185,91 +217,93 @@
     <section id="projects" class="section">
         <h2 class="cyber-title">Proyectos</h2>
         <div class="project-grid">
+
             <div class="project-card">
                 <div class="project-header">
-                    <h3>ManageYourLife (Android)</h3>
+                    <h3>ManageYourLife <span class="platform-tag">Android</span></h3>
                     <div class="project-actions">
-                        <button class="toggle-project" onclick="toggleProject('manageyourlife')">
+                        <button class="toggle-project" onclick="toggleProject('manageyourlife')" aria-label="Expand project">
                             <i class="fas fa-chevron-down"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/manageyourlife" target="_blank" class="github-link">
+                        <a href="https://github.com/Dorjeekhb/manageyourlife" target="_blank" class="github-link" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
                     </div>
                 </div>
+                <p class="project-summary">App de gestión de tareas con etiquetas, prioridades y búsqueda por fecha.</p>
                 <div class="project-content" id="manageyourlife-content">
-                    <p>App básica de gestión de tareas con etiquetas, prioridades y búsqueda por fecha.</p>
                     <div class="tech-stack">
                         <span class="tech-tag">Java</span>
                         <span class="tech-tag">Android Studio</span>
                     </div>
                     <div class="project-gallery" id="manageyourlife-gallery">
-                        <img src="images/2.png" alt="ManageYourLife screenshot 1">
-                        <img src="images/3.png" alt="ManageYourLife screenshot 2">
-                        <img src="images/1.png" alt="ManageYourLife screenshot 3">
+                        <img src="images/2.png" alt="ManageYourLife screenshot 1" loading="lazy">
+                        <img src="images/3.png" alt="ManageYourLife screenshot 2" loading="lazy">
+                        <img src="images/1.png" alt="ManageYourLife screenshot 3" loading="lazy">
                     </div>
                 </div>
             </div>
+
             <div class="project-card">
                 <div class="project-header">
-                    <h3>WhatToWatch (watchOS)</h3>
+                    <h3>WhatToWatch <span class="platform-tag">watchOS</span></h3>
                     <div class="project-actions">
-                        <button class="toggle-project" onclick="toggleProject('whattowatch')">
+                        <button class="toggle-project" onclick="toggleProject('whattowatch')" aria-label="Expand project">
                             <i class="fas fa-chevron-down"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/whattowatch" target="_blank" class="github-link">
+                        <a href="https://github.com/Dorjeekhb/whattowatch" target="_blank" class="github-link" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
                     </div>
                 </div>
+                <p class="project-summary">App para watchOS que recomienda series o películas diarias, con sinopsis, duración y plataforma de streaming.</p>
                 <div class="project-content" id="whattowatch-content">
-                    <p>App para watchOS que recomienda series o películas diarias, con sinopsis, duración y plataforma de streaming.</p>
                     <div class="tech-stack">
                         <span class="tech-tag">Swift</span>
                         <span class="tech-tag">watchOS</span>
                     </div>
                     <div class="project-gallery" id="whattowatch-gallery">
-                        <img src="images/4.png" alt="WhatToWatch screenshot 1">
-                        <img src="images/5.png" alt="WhatToWatch screenshot 2">
-                        <img src="images/6.png" alt="WhatToWatch screenshot 3">
-                        <img src="images/7.png" alt="WhatToWatch screenshot 4">
-                        <img src="images/12.png" alt="WhatToWatch screenshot 5">
-                        <img src="images/22.png" alt="WhatToWatch screenshot 6">
-                        <img src="images/32.png" alt="WhatToWatch screenshot 7">
+                        <img src="images/4.png" alt="WhatToWatch screenshot 1" loading="lazy">
+                        <img src="images/5.png" alt="WhatToWatch screenshot 2" loading="lazy">
+                        <img src="images/6.png" alt="WhatToWatch screenshot 3" loading="lazy">
+                        <img src="images/7.png" alt="WhatToWatch screenshot 4" loading="lazy">
+                        <img src="images/12.png" alt="WhatToWatch screenshot 5" loading="lazy">
+                        <img src="images/22.png" alt="WhatToWatch screenshot 6" loading="lazy">
+                        <img src="images/32.png" alt="WhatToWatch screenshot 7" loading="lazy">
                     </div>
                 </div>
             </div>
+
             <div class="project-card">
                 <div class="project-header">
-                    <h3>Bubble Adventure (Android)</h3>
+                    <h3>Bubble Adventure <span class="platform-tag">Android</span></h3>
                     <div class="project-actions">
-                        <button class="toggle-project" onclick="toggleProject('bubbleadventure')">
+                        <button class="toggle-project" onclick="toggleProject('bubbleadventure')" aria-label="Expand project">
                             <i class="fas fa-chevron-down"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/BubbleAdventure" target="_blank" class="github-link">
+                        <a href="https://github.com/Dorjeekhb/BubbleAdventure" target="_blank" class="github-link" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
                     </div>
                 </div>
+                <p class="project-summary">Juego tipo Puzzle Bobble en Android Studio. Dispara burbujas, combina colores y completa niveles con efectos animados.</p>
                 <div class="project-content" id="bubbleadventure-content">
-                    <p>Juego tipo Puzzle Bobble desarrollado en Android Studio. Dispara burbujas, combina colores y completa niveles con efectos animados.</p>
                     <div class="tech-stack">
                         <span class="tech-tag">Java</span>
                         <span class="tech-tag">Android Studio</span>
                     </div>
                     <div class="project-gallery" id="bubbleadventure-gallery">
-                        <img src="images/pb1.png" alt="Bubble Adventure screenshot 1">
-                        <img src="images/pb2.png" alt="Bubble Adventure screenshot 2">
-                        <img src="images/pb3.png" alt="Bubble Adventure screenshot 3">
-                        <img src="images/pb4.png" alt="Bubble Adventure screenshot 4">
-                        <img src="images/pb5.png" alt="Bubble Adventure screenshot 5">
+                        <img src="images/pb1.png" alt="Bubble Adventure screenshot 1" loading="lazy">
+                        <img src="images/pb2.png" alt="Bubble Adventure screenshot 2" loading="lazy">
+                        <img src="images/pb3.png" alt="Bubble Adventure screenshot 3" loading="lazy">
+                        <img src="images/pb4.png" alt="Bubble Adventure screenshot 4" loading="lazy">
+                        <img src="images/pb5.png" alt="Bubble Adventure screenshot 5" loading="lazy">
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
-
-
 
     <section id="contact" class="section">
         <h2 class="cyber-title">Contacto</h2>
@@ -280,30 +314,30 @@
                 <span class="dot green"></span>
             </div>
             <div class="terminal-content">
-                <p class="type-text">> Iniciando protocolos de comunicación...</p>
+                <p class="type-text" data-text="> Iniciando protocolos de comunicación..."></p>
                 <div class="contact-container">
-                    <a href="https://github.com/Dorjeekhb" target="_blank" class="social-link" onmouseover="playKey()">
+                    <a href="https://github.com/Dorjeekhb" target="_blank" class="social-link">
                         <i class="fab fa-github"></i>
                         <span class="social-tooltip">GitHub</span>
                     </a>
-                    <a href="https://www.linkedin.com/in/dorjee-khyber/" target="_blank" class="social-link" onmouseover="playKey()">
+                    <a href="https://www.linkedin.com/in/dorjee-khyber/" target="_blank" class="social-link">
                         <i class="fab fa-linkedin"></i>
                         <span class="social-tooltip">LinkedIn</span>
                     </a>
-                    <a href="https://twitter.com/DorjeeKhyber" target="_blank" class="social-link" onmouseover="playKey()">
+                    <a href="https://twitter.com/DorjeeKhyber" target="_blank" class="social-link">
                         <i class="fab fa-x-twitter"></i>
                         <span class="social-tooltip">X (Twitter)</span>
                     </a>
                 </div>
-                <p class="type-text contact-email">> root@dorjee:~$</p>
+                <p class="type-text contact-email" data-text="> root@dorjee:~$"></p>
                 <div class="cv-download">
-                    <p class="type-text">> Descargar CV / Download CV:</p>
+                    <p class="type-text" data-text="> Descargar CV / Download CV:"></p>
                     <div class="cv-buttons">
-                        <a href="cves.pdf" class="cv-button" download onmouseover="playKey()">
+                        <a href="cves.pdf" class="cv-button" download>
                             <i class="fas fa-file-download"></i>
                             CV en Español
                         </a>
-                        <a href="cveng.pdf" class="cv-button" download onmouseover="playKey()">
+                        <a href="cveng.pdf" class="cv-button" download>
                             <i class="fas fa-file-download"></i>
                             CV in English
                         </a>
@@ -313,12 +347,11 @@
         </div>
     </section>
 
-    <!-- Audio Elements -->
-    <audio id="bg-music" data-src="https://cdn.pixabay.com/audio/2023/10/29/14-16-19-672_200x200.mp3" preload="none" loop></audio>
-    <audio id="click-sound" data-src="https://cdn.pixabay.com/audio/2022/05/13/16-35-43-54_200x200.mp3" preload="none"></audio>
-    <audio id="key-sound" data-src="https://cdn.pixabay.com/audio/2022/08/02/00-15-02-598_200x200.mp3" preload="none"></audio>
-    <audio id="glitch-sound" data-src="https://cdn.pixabay.com/audio/2022/03/10/15-50-43-204_200x200.mp3" preload="none"></audio>
-    <audio id="nav-hover-sound" data-src="https://cdn.pixabay.com/audio/2022/03/10/15-43-24-182_200x200.mp3" preload="none"></audio>
+    <!-- Audio Elements — loaded only after user interaction -->
+    <audio id="bg-music" preload="none" loop></audio>
+    <audio id="click-sound" preload="none"></audio>
+    <audio id="key-sound" preload="none"></audio>
+    <audio id="nav-hover-sound" preload="none"></audio>
 
     <script src="effect.js"></script>
 </body>
