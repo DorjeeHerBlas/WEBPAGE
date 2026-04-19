@@ -181,7 +181,7 @@ function handleSectionVisibility() {
 }
 
 // ─── #12 GitHub Stats ─────────────────────────────────────────────────────────
-const GITHUB_USER = 'Dorjeekhb';
+const GITHUB_USER = 'DorjeeHerBlas';
 
 async function loadGithubStats() {
     try {
