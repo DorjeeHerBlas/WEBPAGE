@@ -1,16 +1,25 @@
 // ─── #9 Deep-link scroll helper ──────────────────────────────────────────────
 // Reads the actual rendered nav height so the offset is always correct,
 // even on mobile where the nav wraps to two lines.
+const PREFERS_REDUCED_MOTION =
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function getNavHeight() {
     const nav = document.getElementById('main-nav');
     return nav ? nav.getBoundingClientRect().height + 8 : 70;
+}
+
+// Expose the real nav height to CSS so scroll-margin-top is always accurate
+function syncNavHeightVar() {
+    const h = getNavHeight();
+    document.documentElement.style.setProperty('--nav-height', h + 'px');
 }
 
 function scrollToSection(id) {
     const target = document.getElementById(id);
     if (!target) return;
     const top = target.getBoundingClientRect().top + window.pageYOffset - getNavHeight();
-    window.scrollTo({ top, behavior: 'smooth' });
+    window.scrollTo({ top, behavior: PREFERS_REDUCED_MOTION ? 'auto' : 'smooth' });
 }
 
 // Handle hash on initial page load (deep links like portfolio.com/#skills)
@@ -34,15 +43,30 @@ const LOADER_MESSAGES = [
 function runLoader(onDone) {
     const loader = document.getElementById('page-loader');
     const line   = document.getElementById('loader-line');
+
+    // Respect reduced-motion: skip the typewriter animation entirely
+    if (PREFERS_REDUCED_MOTION) {
+        loader.style.display = 'none';
+        onDone();
+        return;
+    }
+
     let msgIndex = 0;
+    let finished = false;
+
+    // Safety net: never let the loader trap the page if transitionend doesn't fire
+    const finish = () => {
+        if (finished) return;
+        finished = true;
+        loader.style.display = 'none';
+        onDone();
+    };
 
     function nextMessage() {
         if (msgIndex >= LOADER_MESSAGES.length) {
             loader.classList.add('loader-hide');
-            loader.addEventListener('transitionend', () => {
-                loader.style.display = 'none';
-                onDone();
-            }, { once: true });
+            loader.addEventListener('transitionend', finish, { once: true });
+            setTimeout(finish, 800);
             return;
         }
         const msg = LOADER_MESSAGES[msgIndex++];
@@ -52,57 +76,92 @@ function runLoader(onDone) {
             line.textContent += msg[i++];
             if (i >= msg.length) {
                 clearInterval(iv);
-                setTimeout(nextMessage, 180);
+                setTimeout(nextMessage, 140);
             }
-        }, 22);
+        }, 18);
     }
     nextMessage();
 }
 
 // ─── Matrix Background ────────────────────────────────────────────────────────
 function createMatrixBackground() {
+    // Skip on reduced-motion: CSS already hides .matrix-bg, no point burning CPU
+    if (PREFERS_REDUCED_MOTION) return;
+
+    const host = document.querySelector('.matrix-bg');
+    if (!host) return;
+
     const canvas  = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    document.querySelector('.matrix-bg').appendChild(canvas);
+    host.appendChild(canvas);
 
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const resize = () => {
+        canvas.width  = window.innerWidth  * dpr;
+        canvas.height = window.innerHeight * dpr;
+        canvas.style.width  = window.innerWidth  + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        context.setTransform(dpr, 0, 0, dpr, 0, 0);
+        columns   = Math.floor(window.innerWidth / fontSize);
+        rainDrops = Array.from({ length: columns }, () => 1);
+    };
 
     const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
     const latin    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const nums     = '0123456789';
     const alphabet = katakana + latin + nums;
     const fontSize = 16;
+    const FRAME_INTERVAL = 1000 / 30; // ~30fps target
 
-    let columns  = Math.floor(canvas.width / fontSize);
-    let rainDrops = Array.from({ length: columns }, () => 1);
+    let columns  = 0;
+    let rainDrops = [];
+    let running = !document.hidden;
+    let lastTime = 0;
 
-    function draw() {
-        context.fillStyle = 'rgba(0,0,0,0.05)';
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = '#0F0';
-        context.font = fontSize + 'px monospace';
-        for (let i = 0; i < rainDrops.length; i++) {
-            const text = alphabet[Math.floor(Math.random() * alphabet.length)];
-            context.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
-            rainDrops[i]++;
+    resize();
+
+    function draw(now) {
+        if (running && now - lastTime >= FRAME_INTERVAL) {
+            lastTime = now;
+            context.fillStyle = 'rgba(0,0,0,0.05)';
+            context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+            context.fillStyle = '#0F0';
+            context.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                context.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > window.innerHeight && Math.random() > 0.975) rainDrops[i] = 0;
+                rainDrops[i]++;
+            }
         }
+        requestAnimationFrame(draw);
     }
+    requestAnimationFrame(draw);
 
-    setInterval(draw, 30);
-
+    // Debounce resize so we don't thrash on phone rotation
+    let resizeTimer;
     window.addEventListener('resize', () => {
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
-        columns   = Math.floor(canvas.width / fontSize);
-        rainDrops = Array.from({ length: columns }, () => 1);
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 150);
     });
+
+    // Pause when tab is hidden — saves battery
+    document.addEventListener('visibilitychange', () => { running = !document.hidden; });
 }
 
 // ─── Real Typewriter Effect ───────────────────────────────────────────────────
 function typeWriterEffect() {
     const elements = document.querySelectorAll('.type-text');
+
+    // If the user prefers reduced motion, just print the full text instantly
+    if (PREFERS_REDUCED_MOTION) {
+        elements.forEach(el => {
+            el.textContent = el.getAttribute('data-text') || '';
+            el.style.opacity = '1';
+        });
+        return;
+    }
+
     elements.forEach((el, index) => {
         const fullText = el.getAttribute('data-text') || '';
         el.textContent = '';
@@ -117,6 +176,28 @@ function typeWriterEffect() {
                 }
             }, 28);
         }, index * 550);
+    });
+}
+
+// ─── Back-to-top button ──────────────────────────────────────────────────────
+function initBackToTop() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+    btn.hidden = false;
+
+    const SHOW_AT = 600;
+    const onScroll = () => {
+        btn.classList.toggle('visible', window.pageYOffset > SHOW_AT);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    btn.addEventListener('click', () => {
+        playClick();
+        window.scrollTo({
+            top: 0,
+            behavior: PREFERS_REDUCED_MOTION ? 'auto' : 'smooth'
+        });
     });
 }
 
@@ -397,6 +478,10 @@ function initCursorTrail() {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    // Sync nav height ASAP so scroll-margin-top is correct even before loader hides
+    syncNavHeightVar();
+    window.addEventListener('resize', syncNavHeightVar, { passive: true });
+
     runLoader(() => {
         // Everything runs after loader finishes
         createMatrixBackground();
@@ -405,7 +490,9 @@ document.addEventListener('DOMContentLoaded', () => {
         initActiveNav();
         handleSectionVisibility();
         initCursorTrail();
+        initBackToTop();
         loadGithubStats();
+        syncNavHeightVar(); // re-measure now that final layout is settled
         handleInitialHash();
 
         document.querySelectorAll('a, button').forEach(el =>

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <meta name="color-scheme" content="dark">
     <title>Dorjee — Video Game & Software Developer</title>
     <meta name="description" content="Dorjee Khyber — Video Game & Software Developer specializing in C++, Unity, SDL, Android and iOS.">
     <meta property="og:title" content="Dorjee — Video Game & Software Developer">
@@ -11,10 +13,16 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Dorjee — Video Game & Software Developer">
     <meta name="twitter:description" content="C++ / Unity / SDL developer. Portfolio of games and apps.">
+    <link rel="icon" type="image/x-icon" href="images/ico.ico">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://api.github.com" crossorigin>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"></noscript>
 </head>
 <body>
+
+    <a class="skip-link" href="#about">Saltar al contenido</a>
 
     <!-- #8 Page loader -->
     <div id="page-loader" aria-hidden="true" role="presentation">
@@ -87,7 +95,7 @@
                     <div class="terminal-content">
                         <div class="exp-header">
                             <span class="exp-role">&gt; Software Developer — Proyectos Personales</span>
-                            <span class="exp-date">2021 – 2026</span>
+                            <span class="exp-date">2021 – Presente</span>
                         </div>
                         <ul class="exp-bullets">
                             <li>&gt; Diseño y desarrollo de videojuegos en <strong>C++</strong> con <strong>SDL2</strong>: gestión de memoria, sistemas de físicas y render.</li>
@@ -270,7 +278,7 @@
                                 aria-label="Expandir ManageYourLife">
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/manageyourlife" target="_blank"
+                        <a href="https://github.com/DorjeeHerBlas/manageyourlife" target="_blank"
                            rel="noopener noreferrer" class="github-link"
                            aria-label="Ver ManageYourLife en GitHub (abre en pestaña nueva)">
                             <i class="fab fa-github" aria-hidden="true"></i>
@@ -299,7 +307,7 @@
                                 aria-label="Expandir WhatToWatch">
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/whattowatch" target="_blank"
+                        <a href="https://github.com/DorjeeHerBlas/whattowatch" target="_blank"
                            rel="noopener noreferrer" class="github-link"
                            aria-label="Ver WhatToWatch en GitHub (abre en pestaña nueva)">
                             <i class="fab fa-github" aria-hidden="true"></i>
@@ -332,7 +340,7 @@
                                 aria-label="Expandir Bubble Adventure">
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
-                        <a href="https://github.com/Dorjeekhb/BubbleAdventure" target="_blank"
+                        <a href="https://github.com/DorjeeHerBlas/BubbleAdventure" target="_blank"
                            rel="noopener noreferrer" class="github-link"
                            aria-label="Ver Bubble Adventure en GitHub (abre en pestaña nueva)">
                             <i class="fab fa-github" aria-hidden="true"></i>
@@ -375,7 +383,7 @@
                 <div id="github-langs" class="github-langs" aria-label="Lenguajes más usados"></div>
                 <div id="github-repos" class="github-repos-list" aria-label="Repositorios destacados"></div>
                 <p class="github-link-row">
-                    <a href="https://github.com/Dorjeekhb" target="_blank" rel="noopener noreferrer"
+                    <a href="https://github.com/DorjeeHerBlas" target="_blank" rel="noopener noreferrer"
                        class="cv-button" style="display:inline-flex;margin-top:1.5rem;">
                         <i class="fab fa-github" aria-hidden="true"></i> Ver perfil completo
                     </a>
@@ -394,7 +402,7 @@
             <div class="terminal-content">
                 <p class="type-text" data-text="> Iniciando protocolos de comunicación..."></p>
                 <div class="contact-container">
-                    <a href="https://github.com/Dorjeekhb" target="_blank" rel="noopener noreferrer"
+                    <a href="https://github.com/DorjeeHerBlas" target="_blank" rel="noopener noreferrer"
                        class="social-link" aria-label="GitHub de Dorjee (abre en pestaña nueva)">
                         <i class="fab fa-github" aria-hidden="true"></i>
                         <span class="social-tooltip" aria-hidden="true">GitHub</span>
@@ -425,6 +433,11 @@
             </div>
         </div>
     </section>
+
+    <button class="back-to-top" id="back-to-top" type="button"
+            aria-label="Volver arriba" title="Volver arriba" hidden>
+        <i class="fas fa-arrow-up" aria-hidden="true"></i>
+    </button>
 
     <audio id="bg-music" preload="none" loop></audio>
     <audio id="click-sound" preload="none"></audio>
