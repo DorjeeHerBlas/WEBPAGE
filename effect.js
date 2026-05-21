@@ -4,6 +4,281 @@
 const PREFERS_REDUCED_MOTION =
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// ─── i18n ────────────────────────────────────────────────────────────────────
+// English is the default. Spanish is the alternative.
+// Keys follow dotted notation: section.key. The HTML uses these attributes:
+//   data-i18n         → replace textContent
+//   data-i18n-html    → replace innerHTML (use only with trusted strings)
+//   data-i18n-aria    → replace aria-label
+//   data-i18n-typed   → replace data-text (the source of the typewriter effect)
+const I18N = {
+    en: {
+        // Meta / a11y shell
+        'title': "Dorjee — Video Game & Software Developer",
+        'meta.description': "Dorjee Khyber — Video Game & Software Developer specializing in C++, Unity, SDL, Android and iOS.",
+        'skip': "Skip to content",
+        'aria.toggleSound': "Toggle sound",
+        'aria.toggleLang': "Switch language",
+        'aria.goToAbout': "Go to About section",
+        'aria.mainNav': "Main navigation",
+        'aria.backToTop': "Back to top",
+        'aria.stats': "Stats",
+        'aria.langs': "Top languages",
+        'aria.repos': "Featured repositories",
+        'aria.details': "Details",
+        // Loader
+        'loader.boot': "> Booting system...",
+        'loader.modules': "> Loading modules...",
+        'loader.matrix': "> Connecting to matrix...",
+        'loader.ready': "> System ready.",
+        // Header
+        'header.subtitle': "Video Game & Software Developer",
+        'header.scroll': "↓ Scroll",
+        // About
+        'about.boot': "> Booting system...",
+        'about.loading': "> Loading profile: DORJEE",
+        'about.role': "> Video Game Developer (C++ / Unity / SDL)",
+        'about.platforms': "> Cross-platform development: Android, watchOS, iOS, Desktop",
+        // Experience
+        'exp.title': "Experience",
+        'exp.devRole': "> Software Developer — Personal Projects",
+        'exp.devDates': "2021 – Present",
+        'exp.dev1': "> Designed and developed video games in <strong>C++</strong> with <strong>SDL2</strong>: memory management, physics and rendering systems.",
+        'exp.dev2': "> Cross-platform games in <strong>Unity / C#</strong>: AI, audio, UI and build pipelines.",
+        'exp.dev3': "> Published apps on <strong>Android</strong> (Java/Kotlin) and <strong>watchOS</strong> (Swift).",
+        'exp.dev4': "> Version control with <strong>Git</strong>, technical documentation and basic CI.",
+        'exp.researchRole': "> Researcher — Master's in History and Anthropology of America",
+        'exp.researchDates': "2020 – 2021",
+        'exp.research1': "> Qualitative and quantitative data analysis for academic research.",
+        'exp.research2': "> Technical and academic writing in English and Spanish.",
+        'exp.research3': "> Transferable skills: systems thinking, narrative and project management.",
+        'exp.tagResearch': "Research",
+        'exp.tagAnalysis': "Data analysis",
+        'exp.tagDocs': "Documentation",
+        // Education
+        'edu.title': "Education",
+        'edu.degree1': "> Bachelor's Degree in Video Game Development",
+        'edu.degree2': "> Master's Degree in History and Anthropology of America",
+        'edu.degree3': "> Bachelor's Degree in Anthropology",
+        'edu.school': "> Complutense University of Madrid (UCM)",
+        // Skills
+        'skills.title': "Skills",
+        'skills.expert': "Expert",
+        'skills.advanced': "Advanced",
+        'skills.intermediate': "Intermediate",
+        'skills.basic': "Basic",
+        // Projects
+        'projects.title': "Projects",
+        'proj.manage.summary': "Task management app with tags, priorities and date-based search.",
+        'proj.watch.summary': "watchOS app that recommends daily series or movies, with synopsis, duration and streaming platform.",
+        'proj.bubble.summary': "Puzzle Bobble-style game in Android Studio. Shoot bubbles, match colors and complete levels with animated effects.",
+        'aria.expandManage': "Expand ManageYourLife",
+        'aria.expandWatch': "Expand WhatToWatch",
+        'aria.expandBubble': "Expand Bubble Adventure",
+        'aria.viewManage': "View ManageYourLife on GitHub (opens in new tab)",
+        'aria.viewWatch': "View WhatToWatch on GitHub (opens in new tab)",
+        'aria.viewBubble': "View Bubble Adventure on GitHub (opens in new tab)",
+        // GitHub
+        'gh.title': "GitHub Activity",
+        'gh.connecting': "> Connecting to api.github.com...",
+        'gh.viewProfile': "View full profile",
+        'gh.topLangs': "Top languages:",
+        'gh.featuredRepos': "Featured repositories:",
+        'gh.langDistribution': "Language distribution",
+        'gh.noDescription': "No description",
+        // Contact
+        'contact.title': "Contact",
+        'contact.boot': "> Initiating communication protocols...",
+        'contact.cv': "> Download CV:",
+        'contact.cvEs': "CV in Spanish",
+        'contact.cvEn': "CV in English",
+        'aria.socialGithub': "Dorjee's GitHub (opens in new tab)",
+        'aria.socialLinkedin': "Dorjee's LinkedIn (opens in new tab)",
+        'aria.socialX': "Dorjee's X/Twitter (opens in new tab)",
+        'aria.downloadEs': "Download CV in Spanish",
+        'aria.downloadEn': "Download CV in English",
+    },
+    es: {
+        // Meta / a11y shell
+        'title': "Dorjee — Desarrollador de Videojuegos y Software",
+        'meta.description': "Dorjee Khyber — Desarrollador de Videojuegos y Software especializado en C++, Unity, SDL, Android e iOS.",
+        'skip': "Saltar al contenido",
+        'aria.toggleSound': "Activar o desactivar sonido",
+        'aria.toggleLang': "Cambiar idioma",
+        'aria.goToAbout': "Ir a la sección About",
+        'aria.mainNav': "Navegación principal",
+        'aria.backToTop': "Volver arriba",
+        'aria.stats': "Estadísticas",
+        'aria.langs': "Lenguajes más usados",
+        'aria.repos': "Repositorios destacados",
+        'aria.details': "Detalles",
+        // Loader
+        'loader.boot': "> Iniciando sistema...",
+        'loader.modules': "> Cargando módulos...",
+        'loader.matrix': "> Conectando con la matrix...",
+        'loader.ready': "> Sistema listo.",
+        // Header
+        'header.subtitle': "Desarrollador de Videojuegos y Software",
+        'header.scroll': "↓ Scroll",
+        // About
+        'about.boot': "> Iniciando sistema...",
+        'about.loading': "> Cargando perfil: DORJEE",
+        'about.role': "> Desarrollador de Videojuegos (C++ / Unity / SDL)",
+        'about.platforms': "> Programación multiplataforma: Android, watchOS, iOS, Desktop",
+        // Experience
+        'exp.title': "Experiencia",
+        'exp.devRole': "> Software Developer — Proyectos Personales",
+        'exp.devDates': "2021 – Presente",
+        'exp.dev1': "> Diseño y desarrollo de videojuegos en <strong>C++</strong> con <strong>SDL2</strong>: gestión de memoria, sistemas de físicas y render.",
+        'exp.dev2': "> Juegos multiplataforma en <strong>Unity / C#</strong>: IA, audio, UI y build pipelines.",
+        'exp.dev3': "> Publicación de apps en <strong>Android</strong> (Java/Kotlin) y <strong>watchOS</strong> (Swift).",
+        'exp.dev4': "> Control de versiones con <strong>Git</strong>, documentación técnica y CI básico.",
+        'exp.researchRole': "> Investigador — Máster en Historia y Antropología de América",
+        'exp.researchDates': "2020 – 2021",
+        'exp.research1': "> Análisis de datos cualitativos y cuantitativos para investigación académica.",
+        'exp.research2': "> Redacción de documentación técnica y académica en inglés y español.",
+        'exp.research3': "> Habilidades transferibles: pensamiento sistémico, narrativa y gestión de proyectos.",
+        'exp.tagResearch': "Investigación",
+        'exp.tagAnalysis': "Análisis de datos",
+        'exp.tagDocs': "Documentación",
+        // Education
+        'edu.title': "Educación",
+        'edu.degree1': "> Grado en Desarrollo de Videojuegos",
+        'edu.degree2': "> Máster en Historia y Antropología de América",
+        'edu.degree3': "> Grado en Antropología",
+        'edu.school': "> Universidad Complutense de Madrid (UCM)",
+        // Skills
+        'skills.title': "Skills",
+        'skills.expert': "Experto",
+        'skills.advanced': "Avanzado",
+        'skills.intermediate': "Intermedio",
+        'skills.basic': "Básico",
+        // Projects
+        'projects.title': "Proyectos",
+        'proj.manage.summary': "App de gestión de tareas con etiquetas, prioridades y búsqueda por fecha.",
+        'proj.watch.summary': "App para watchOS que recomienda series o películas diarias, con sinopsis, duración y plataforma de streaming.",
+        'proj.bubble.summary': "Juego tipo Puzzle Bobble en Android Studio. Dispara burbujas, combina colores y completa niveles con efectos animados.",
+        'aria.expandManage': "Expandir ManageYourLife",
+        'aria.expandWatch': "Expandir WhatToWatch",
+        'aria.expandBubble': "Expandir Bubble Adventure",
+        'aria.viewManage': "Ver ManageYourLife en GitHub (abre en pestaña nueva)",
+        'aria.viewWatch': "Ver WhatToWatch en GitHub (abre en pestaña nueva)",
+        'aria.viewBubble': "Ver Bubble Adventure en GitHub (abre en pestaña nueva)",
+        // GitHub
+        'gh.title': "Actividad en GitHub",
+        'gh.connecting': "> Conectando a api.github.com...",
+        'gh.viewProfile': "Ver perfil completo",
+        'gh.topLangs': "Lenguajes más usados:",
+        'gh.featuredRepos': "Repositorios destacados:",
+        'gh.langDistribution': "Distribución de lenguajes",
+        'gh.noDescription': "Sin descripción",
+        // Contact
+        'contact.title': "Contacto",
+        'contact.boot': "> Iniciando protocolos de comunicación...",
+        'contact.cv': "> Descargar CV:",
+        'contact.cvEs': "CV en Español",
+        'contact.cvEn': "CV en Inglés",
+        'aria.socialGithub': "GitHub de Dorjee (abre en pestaña nueva)",
+        'aria.socialLinkedin': "LinkedIn de Dorjee (abre en pestaña nueva)",
+        'aria.socialX': "X/Twitter de Dorjee (abre en pestaña nueva)",
+        'aria.downloadEs': "Descargar CV en Español",
+        'aria.downloadEn': "Descargar CV en Inglés",
+    }
+};
+
+const I18N_STORAGE_KEY = 'dorjee.lang';
+let CURRENT_LANG = 'en';
+
+// Get the initial language: saved preference > browser preference > 'en'.
+function getInitialLanguage() {
+    try {
+        const saved = localStorage.getItem(I18N_STORAGE_KEY);
+        if (saved === 'en' || saved === 'es') return saved;
+    } catch (_) { /* localStorage may be blocked in private mode */ }
+
+    const nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    return nav.startsWith('es') ? 'es' : 'en';
+}
+
+function t(key) {
+    return (I18N[CURRENT_LANG] && I18N[CURRENT_LANG][key]) || I18N.en[key] || key;
+}
+
+// Apply the active language to the DOM. Safe to call multiple times.
+function applyLanguage(lang) {
+    if (!I18N[lang]) lang = 'en';
+    CURRENT_LANG = lang;
+
+    document.documentElement.lang = lang;
+
+    // <title> and meta description
+    const title = t('title');
+    if (document.title !== title) document.title = title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', t('meta.description'));
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', t('meta.description'));
+
+    // Plain text replacements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const value = t(key);
+        if (el.textContent !== value) el.textContent = value;
+    });
+
+    // innerHTML replacements — only used for strings that contain <strong> etc.
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        el.innerHTML = t(el.getAttribute('data-i18n-html'));
+    });
+
+    // aria-label replacements
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+        el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+    });
+
+    // data-text replacements (typewriter source). We update the attribute and,
+    // if the typewriter has already rendered, also update the visible text.
+    document.querySelectorAll('[data-i18n-typed]').forEach(el => {
+        const value = t(el.getAttribute('data-i18n-typed'));
+        el.setAttribute('data-text', value);
+        // If the typewriter already finished (textContent has content), refresh it.
+        if (el.textContent && el.textContent.length > 0) el.textContent = value;
+    });
+
+    // Loader messages array (kept in sync for any future re-runs)
+    LOADER_MESSAGES.length = 0;
+    LOADER_MESSAGES.push(t('loader.boot'), t('loader.modules'), t('loader.matrix'), t('loader.ready'));
+
+    // Skill level labels — they live in <span class="level-label"> inside <div data-level="...">
+    document.querySelectorAll('.level-bar[data-level]').forEach(bar => {
+        const level = bar.getAttribute('data-level'); // expert | advanced | intermediate | basic
+        const label = bar.querySelector('.level-label');
+        if (label) label.textContent = t('skills.' + level);
+        // Update the parent skill-card aria-label too (e.g. "C++ — Advanced")
+        const card = bar.closest('.skill-card');
+        if (card) {
+            const heading = card.querySelector('h3');
+            if (heading) {
+                card.setAttribute('aria-label', `${heading.textContent} — ${t('skills.' + level)}`);
+            }
+            bar.setAttribute('aria-label', `${t('skills.' + level)} level`);
+        }
+    });
+
+    // Toggle button shows the OTHER language (the one you'd switch to)
+    const toggleLabel = document.getElementById('lang-toggle-label');
+    if (toggleLabel) toggleLabel.textContent = lang === 'en' ? 'ES' : 'EN';
+}
+
+function setLanguage(lang) {
+    applyLanguage(lang);
+    try { localStorage.setItem(I18N_STORAGE_KEY, lang); } catch (_) {}
+}
+
+function toggleLanguage() {
+    setLanguage(CURRENT_LANG === 'en' ? 'es' : 'en');
+}
+
 function getNavHeight() {
     const nav = document.getElementById('main-nav');
     return nav ? nav.getBoundingClientRect().height + 8 : 70;
@@ -33,11 +308,13 @@ function handleInitialHash() {
 }
 
 // ─── #8 Page Loader ───────────────────────────────────────────────────────────
+// LOADER_MESSAGES is mutated by applyLanguage() — keep it as `let` (well, const
+// array we mutate in place) so the i18n module can swap its contents.
 const LOADER_MESSAGES = [
-    '> Iniciando NormonCorp OS v2.4...',
-    '> Cargando módulos...',
-    '> Conectando matrix...',
-    '> Sistema listo.'
+    '> Booting system...',
+    '> Loading modules...',
+    '> Connecting to matrix...',
+    '> System ready.'
 ];
 
 function runLoader(onDone) {
@@ -310,8 +587,8 @@ async function loadGithubStats() {
         };
 
         document.getElementById('github-langs').innerHTML = `
-            <p class="github-section-label">&gt; Lenguajes más usados:</p>
-            <div class="lang-bar-track" role="img" aria-label="Distribución de lenguajes">
+            <p class="github-section-label">&gt; ${t('gh.topLangs')}</p>
+            <div class="lang-bar-track" role="img" aria-label="${t('gh.langDistribution')}">
                 ${sortedLangs.map(([lang, count]) => `
                     <div class="lang-bar-segment"
                          style="width:${((count/total)*100).toFixed(1)}%;background:${LANG_COLORS[lang] || LANG_COLORS.default}"
@@ -335,11 +612,11 @@ async function loadGithubStats() {
             .slice(0, 4);
 
         document.getElementById('github-repos').innerHTML = `
-            <p class="github-section-label">&gt; Repositorios destacados:</p>
+            <p class="github-section-label">&gt; ${t('gh.featuredRepos')}</p>
             <div class="repo-grid">
                 ${topRepos.map(r => `
                     <a href="${r.html_url}" target="_blank" rel="noopener noreferrer"
-                       class="repo-card" aria-label="${r.name}, ${r.description || 'Sin descripción'}">
+                       class="repo-card" aria-label="${r.name}, ${r.description || t('gh.noDescription')}">
                         <div class="repo-name"><i class="fas fa-folder-open" aria-hidden="true"></i> ${r.name}</div>
                         <p class="repo-desc">${r.description || '—'}</p>
                         <div class="repo-meta">
@@ -478,6 +755,9 @@ function initCursorTrail() {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    // Apply language BEFORE anything renders — the loader messages depend on it.
+    applyLanguage(getInitialLanguage());
+
     // Sync nav height ASAP so scroll-margin-top is correct even before loader hides
     syncNavHeightVar();
     window.addEventListener('resize', syncNavHeightVar, { passive: true });
