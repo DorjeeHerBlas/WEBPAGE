@@ -24,16 +24,6 @@
 
     <a class="skip-link" href="#about" data-i18n="skip">Skip to content</a>
 
-    <!-- #8 Page loader -->
-    <div id="page-loader" aria-hidden="true" role="presentation">
-        <div class="loader-terminal">
-            <span class="loader-line" id="loader-line"></span>
-            <span class="loader-cursor">█</span>
-        </div>
-    </div>
-
-    <div class="matrix-bg" aria-hidden="true"></div>
-
     <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()"
             aria-label="Toggle sound" data-i18n-aria="aria.toggleSound" title="Toggle sound">
         <i class="fas fa-volume-mute" id="sound-icon" aria-hidden="true"></i>
@@ -67,7 +57,7 @@
             <li><a href="#education"  data-section="education">./education</a></li>
             <li><a href="#skills"     data-section="skills">./skills</a></li>
             <li><a href="#projects"   data-section="projects">./projects</a></li>
-            <li><a href="#tfg"        data-section="tfg">./tfg</a></li>
+            <li><a href="#tfg"        data-section="tfg" data-i18n="nav.tfg">./thesis</a></li>
             <li><a href="#github"     data-section="github">./github</a></li>
             <li><a href="#contact"    data-section="contact">./contact</a></li>
         </ul>
@@ -506,9 +496,6 @@
     </button>
 
     <audio id="bg-music" preload="none" loop></audio>
-    <audio id="click-sound" preload="none"></audio>
-    <audio id="key-sound" preload="none"></audio>
-    <audio id="nav-hover-sound" preload="none"></audio>
 
     <script src="effect.js"></script>
 </body>

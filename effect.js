@@ -1,16 +1,13 @@
 // ─── #9 Deep-link scroll helper ──────────────────────────────────────────────
 // Reads the actual rendered nav height so the offset is always correct,
 // even on mobile where the nav wraps to two lines.
-const PREFERS_REDUCED_MOTION =
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 // ─── i18n ────────────────────────────────────────────────────────────────────
 // English is the default. Spanish is the alternative.
 // Keys follow dotted notation: section.key. The HTML uses these attributes:
 //   data-i18n         → replace textContent
 //   data-i18n-html    → replace innerHTML (use only with trusted strings)
 //   data-i18n-aria    → replace aria-label
-//   data-i18n-typed   → replace data-text (the source of the typewriter effect)
+//   data-i18n-typed   → replace data-text (terminal text rendered instantly)
 const I18N = {
     en: {
         // Meta / a11y shell
@@ -26,11 +23,7 @@ const I18N = {
         'aria.langs': "Top languages",
         'aria.repos': "Featured repositories",
         'aria.details': "Details",
-        // Loader
-        'loader.boot': "> Booting system...",
-        'loader.modules': "> Loading modules...",
-        'loader.matrix': "> Connecting to matrix...",
-        'loader.ready': "> System ready.",
+        'nav.tfg': "./thesis",
         // Header
         'header.subtitle': "Video Game & Software Developer",
         'header.scroll': "↓ Scroll",
@@ -88,9 +81,9 @@ const I18N = {
         'tfg.point1': "> Moves gameplay validation from the client to a secure backend to reduce cheating, score fraud and data manipulation.",
         'tfg.point2': "> Applies <strong>AWS</strong>, <strong>serverless</strong> services and distributed-computing principles to build scalable, traceable systems.",
         'tfg.point3': "> Defines a reproducible framework for safer, more sustainable game development without slowing down iteration.",
-        'tfg.download': "> Download TFG:",
-        'tfg.pdfEs': "TFG in Spanish",
-        'tfg.pdfEn': "TFG in English",
+        'tfg.download': "> Download thesis:",
+        'tfg.pdfEs': "Thesis in Spanish",
+        'tfg.pdfEn': "Thesis in English",
         'aria.downloadTfgEs': "Download TFG in Spanish",
         'aria.downloadTfgEn': "Download TFG in English",
         // GitHub
@@ -127,11 +120,7 @@ const I18N = {
         'aria.langs': "Lenguajes más usados",
         'aria.repos': "Repositorios destacados",
         'aria.details': "Detalles",
-        // Loader
-        'loader.boot': "> Iniciando sistema...",
-        'loader.modules': "> Cargando módulos...",
-        'loader.matrix': "> Conectando con la matrix...",
-        'loader.ready': "> Sistema listo.",
+        'nav.tfg': "./tfg",
         // Header
         'header.subtitle': "Desarrollador de Videojuegos y Software",
         'header.scroll': "↓ Scroll",
@@ -266,18 +255,12 @@ function applyLanguage(lang) {
         el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
     });
 
-    // data-text replacements (typewriter source). We update the attribute and,
-    // if the typewriter has already rendered, also update the visible text.
+    // data-text replacements for terminal text.
     document.querySelectorAll('[data-i18n-typed]').forEach(el => {
         const value = t(el.getAttribute('data-i18n-typed'));
         el.setAttribute('data-text', value);
-        // If the typewriter already finished (textContent has content), refresh it.
         if (el.textContent && el.textContent.length > 0) el.textContent = value;
     });
-
-    // Loader messages array (kept in sync for any future re-runs)
-    LOADER_MESSAGES.length = 0;
-    LOADER_MESSAGES.push(t('loader.boot'), t('loader.modules'), t('loader.matrix'), t('loader.ready'));
 
     // Skill level labels — they live in <span class="level-label"> inside <div data-level="...">
     document.querySelectorAll('.level-bar[data-level]').forEach(bar => {
@@ -324,7 +307,7 @@ function scrollToSection(id) {
     const target = document.getElementById(id);
     if (!target) return;
     const top = target.getBoundingClientRect().top + window.pageYOffset - getNavHeight();
-    window.scrollTo({ top, behavior: PREFERS_REDUCED_MOTION ? 'auto' : 'smooth' });
+    window.scrollTo({ top, behavior: 'auto' });
 }
 
 // Handle hash on initial page load (deep links like portfolio.com/#skills)
@@ -332,157 +315,15 @@ function handleInitialHash() {
     const hash = window.location.hash;
     if (hash) {
         const id = hash.slice(1);
-        // Small delay to let layout settle after loader hides
-        setTimeout(() => scrollToSection(id), 400);
+        setTimeout(() => scrollToSection(id), 0);
     }
 }
 
-// ─── #8 Page Loader ───────────────────────────────────────────────────────────
-// LOADER_MESSAGES is mutated by applyLanguage() — keep it as `let` (well, const
-// array we mutate in place) so the i18n module can swap its contents.
-const LOADER_MESSAGES = [
-    '> Booting system...',
-    '> Loading modules...',
-    '> Connecting to matrix...',
-    '> System ready.'
-];
-
-function runLoader(onDone) {
-    const loader = document.getElementById('page-loader');
-    const line   = document.getElementById('loader-line');
-
-    // Respect reduced-motion: skip the typewriter animation entirely
-    if (PREFERS_REDUCED_MOTION) {
-        loader.style.display = 'none';
-        onDone();
-        return;
-    }
-
-    let msgIndex = 0;
-    let finished = false;
-
-    // Safety net: never let the loader trap the page if transitionend doesn't fire
-    const finish = () => {
-        if (finished) return;
-        finished = true;
-        loader.style.display = 'none';
-        onDone();
-    };
-
-    function nextMessage() {
-        if (msgIndex >= LOADER_MESSAGES.length) {
-            loader.classList.add('loader-hide');
-            loader.addEventListener('transitionend', finish, { once: true });
-            setTimeout(finish, 800);
-            return;
-        }
-        const msg = LOADER_MESSAGES[msgIndex++];
-        let i = 0;
-        line.textContent = '';
-        const iv = setInterval(() => {
-            line.textContent += msg[i++];
-            if (i >= msg.length) {
-                clearInterval(iv);
-                setTimeout(nextMessage, 140);
-            }
-        }, 18);
-    }
-    nextMessage();
-}
-
-// ─── Matrix Background ────────────────────────────────────────────────────────
-function createMatrixBackground() {
-    // Skip on reduced-motion: CSS already hides .matrix-bg, no point burning CPU
-    if (PREFERS_REDUCED_MOTION) return;
-
-    const host = document.querySelector('.matrix-bg');
-    if (!host) return;
-
-    const canvas  = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    host.appendChild(canvas);
-
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const resize = () => {
-        canvas.width  = window.innerWidth  * dpr;
-        canvas.height = window.innerHeight * dpr;
-        canvas.style.width  = window.innerWidth  + 'px';
-        canvas.style.height = window.innerHeight + 'px';
-        context.setTransform(dpr, 0, 0, dpr, 0, 0);
-        columns   = Math.floor(window.innerWidth / fontSize);
-        rainDrops = Array.from({ length: columns }, () => 1);
-    };
-
-    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-    const latin    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const nums     = '0123456789';
-    const alphabet = katakana + latin + nums;
-    const fontSize = 16;
-    const FRAME_INTERVAL = 1000 / 30; // ~30fps target
-
-    let columns  = 0;
-    let rainDrops = [];
-    let running = !document.hidden;
-    let lastTime = 0;
-
-    resize();
-
-    function draw(now) {
-        if (running && now - lastTime >= FRAME_INTERVAL) {
-            lastTime = now;
-            context.fillStyle = 'rgba(0,0,0,0.05)';
-            context.fillRect(0, 0, window.innerWidth, window.innerHeight);
-            context.fillStyle = '#0F0';
-            context.font = fontSize + 'px monospace';
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
-                context.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-                if (rainDrops[i] * fontSize > window.innerHeight && Math.random() > 0.975) rainDrops[i] = 0;
-                rainDrops[i]++;
-            }
-        }
-        requestAnimationFrame(draw);
-    }
-    requestAnimationFrame(draw);
-
-    // Debounce resize so we don't thrash on phone rotation
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(resize, 150);
-    });
-
-    // Pause when tab is hidden — saves battery
-    document.addEventListener('visibilitychange', () => { running = !document.hidden; });
-}
-
-// ─── Real Typewriter Effect ───────────────────────────────────────────────────
-function typeWriterEffect() {
-    const elements = document.querySelectorAll('.type-text');
-
-    // If the user prefers reduced motion, just print the full text instantly
-    if (PREFERS_REDUCED_MOTION) {
-        elements.forEach(el => {
-            el.textContent = el.getAttribute('data-text') || '';
-            el.style.opacity = '1';
-        });
-        return;
-    }
-
-    elements.forEach((el, index) => {
-        const fullText = el.getAttribute('data-text') || '';
-        el.textContent = '';
+// ─── Terminal Text ────────────────────────────────────────────────────────────
+function renderTerminalText() {
+    document.querySelectorAll('.type-text').forEach(el => {
+        el.textContent = el.getAttribute('data-text') || '';
         el.style.opacity = '1';
-        let charIndex = 0;
-        setTimeout(() => {
-            const iv = setInterval(() => {
-                if (charIndex < fullText.length) {
-                    el.textContent += fullText[charIndex++];
-                } else {
-                    clearInterval(iv);
-                }
-            }, 28);
-        }, index * 550);
     });
 }
 
@@ -500,10 +341,9 @@ function initBackToTop() {
     onScroll();
 
     btn.addEventListener('click', () => {
-        playClick();
         window.scrollTo({
             top: 0,
-            behavior: PREFERS_REDUCED_MOTION ? 'auto' : 'smooth'
+            behavior: 'auto'
         });
     });
 }
@@ -516,7 +356,6 @@ function initSmoothScroll() {
             const target = document.getElementById(targetId);
             if (!target) return;
             e.preventDefault();
-            playClick();
             scrollToSection(targetId);
         });
     });
@@ -546,26 +385,13 @@ function initActiveNav() {
 // ─── Scroll Reveal ────────────────────────────────────────────────────────────
 function handleSectionVisibility() {
     const sections = document.querySelectorAll('.section');
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add('visible');
-
-            if (entry.target.id === 'skills') {
-                entry.target.querySelectorAll('.skill-card').forEach((card, i) => {
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                        const bar = card.querySelector('.level-bar');
-                        if (bar) bar.classList.add('animated');
-                    }, i * 80);
-                });
-            }
-        });
-    }, { threshold: 0.08 });
-
-    sections.forEach(s => observer.observe(s));
+    sections.forEach(section => section.classList.add('visible'));
+    document.querySelectorAll('.skill-card').forEach(card => {
+        card.style.opacity = '1';
+        card.style.transform = 'none';
+        const bar = card.querySelector('.level-bar');
+        if (bar) bar.classList.add('animated');
+    });
 }
 
 // ─── #12 GitHub Stats ─────────────────────────────────────────────────────────
@@ -668,36 +494,21 @@ async function loadGithubStats() {
 let soundEnabled = false;
 let audioLoaded  = false;
 
-const AUDIO_SOURCES = {
-    'bg-music':        'https://cdn.pixabay.com/audio/2023/10/29/14-16-19-672_200x200.mp3',
-    'click-sound':     'https://cdn.pixabay.com/audio/2022/05/13/16-35-43-54_200x200.mp3',
-    'key-sound':       'https://cdn.pixabay.com/audio/2022/08/02/00-15-02-598_200x200.mp3',
-    'nav-hover-sound': 'https://cdn.pixabay.com/audio/2022/03/10/15-43-24-182_200x200.mp3'
-};
+const BG_MUSIC_SOURCE = 'https://cdn.pixabay.com/audio/2023/10/29/14-16-19-672_200x200.mp3';
 
 function loadAudio() {
     if (audioLoaded) return;
     audioLoaded = true;
-    Object.entries(AUDIO_SOURCES).forEach(([id, src]) => {
-        const el = document.getElementById(id);
-        if (el) el.src = src;
-    });
+    const bgMusic = document.getElementById('bg-music');
+    if (bgMusic) bgMusic.src = BG_MUSIC_SOURCE;
 }
-
-function playSound(audioId) {
-    if (!soundEnabled) return;
-    const audio = document.getElementById(audioId);
-    if (audio && audio.src) { audio.currentTime = 0; audio.play().catch(() => {}); }
-}
-
-function playClick()    { playSound('click-sound'); }
-function playNavHover() { playSound('nav-hover-sound'); }
 
 function toggleSound() {
     loadAudio();
     soundEnabled = !soundEnabled;
     const bgMusic = document.getElementById('bg-music');
     const icon    = document.getElementById('sound-icon');
+    if (!bgMusic) return;
     if (soundEnabled) {
         bgMusic.play().catch(() => {});
         icon?.classList.replace('fa-volume-mute', 'fa-volume-up');
@@ -709,7 +520,6 @@ function toggleSound() {
 
 // ─── Project Toggle ───────────────────────────────────────────────────────────
 function toggleProject(projectId) {
-    playClick();
     const content = document.getElementById(`${projectId}-content`);
     const button  = document.querySelector(`[aria-controls="${projectId}-content"]`);
     const wasExpanded = content.classList.contains('expanded');
@@ -724,7 +534,7 @@ function toggleProject(projectId) {
         content.classList.add('expanded');
         button?.classList.add('expanded');
         button?.setAttribute('aria-expanded', 'true');
-        requestAnimationFrame(() => content.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+        content.scrollIntoView({ behavior: 'auto', block: 'nearest' });
         content.querySelectorAll('.project-gallery img').forEach(img => {
             img.onclick = () => showFullscreenImage(img.src, img.alt);
         });
@@ -745,9 +555,7 @@ function showFullscreenImage(src, alt = '') {
     document.body.appendChild(overlay);
 
     const close = () => {
-        overlay.classList.add('closing');
-        overlay.addEventListener('animationend', () => overlay.remove(), { once: true });
-        setTimeout(() => overlay.remove(), 350);
+        overlay.remove();
     };
 
     overlay.querySelector('.close-fullscreen').addEventListener('click', close);
@@ -759,27 +567,17 @@ function showFullscreenImage(src, alt = '') {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-    // Apply language BEFORE anything renders — the loader messages depend on it.
     applyLanguage(getInitialLanguage());
 
-    // Sync nav height ASAP so scroll-margin-top is correct even before loader hides
     syncNavHeightVar();
     window.addEventListener('resize', syncNavHeightVar, { passive: true });
 
-    runLoader(() => {
-        // Everything runs after loader finishes
-        createMatrixBackground();
-        typeWriterEffect();
-        initSmoothScroll();
-        initActiveNav();
-        handleSectionVisibility();
-        initBackToTop();
-        loadGithubStats();
-        syncNavHeightVar(); // re-measure now that final layout is settled
-        handleInitialHash();
-
-        document.querySelectorAll('a, button').forEach(el =>
-            el.addEventListener('mouseenter', playNavHover)
-        );
-    });
+    renderTerminalText();
+    initSmoothScroll();
+    initActiveNav();
+    handleSectionVisibility();
+    initBackToTop();
+    loadGithubStats();
+    syncNavHeightVar();
+    handleInitialHash();
 });
