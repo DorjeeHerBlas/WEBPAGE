@@ -78,6 +78,21 @@ const I18N = {
         'aria.viewManage': "View ManageYourLife on GitHub (opens in new tab)",
         'aria.viewWatch': "View WhatToWatch on GitHub (opens in new tab)",
         'aria.viewBubble': "View Bubble Adventure on GitHub (opens in new tab)",
+        // TFG
+        'tfg.title': "Final Degree Project",
+        'tfg.boot': "> Loading final_degree_project.md",
+        'tfg.badge': "Bachelor's Thesis",
+        'tfg.grade': "Grade: 10",
+        'tfg.name': "Player Protection: The Black Box of Logic",
+        'tfg.description': "A cybersecurity-focused Final Degree Project for video games. It studies the risks of trusting the player's device and proposes a server-side validation model based on distributed computing and serverless cloud architecture.",
+        'tfg.point1': "> Moves gameplay validation from the client to a secure backend to reduce cheating, score fraud and data manipulation.",
+        'tfg.point2': "> Applies <strong>AWS</strong>, <strong>serverless</strong> services and distributed-computing principles to build scalable, traceable systems.",
+        'tfg.point3': "> Defines a reproducible framework for safer, more sustainable game development without slowing down iteration.",
+        'tfg.download': "> Download TFG:",
+        'tfg.pdfEs': "TFG in Spanish",
+        'tfg.pdfEn': "TFG in English",
+        'aria.downloadTfgEs': "Download TFG in Spanish",
+        'aria.downloadTfgEn': "Download TFG in English",
         // GitHub
         'gh.title': "GitHub Activity",
         'gh.connecting': "> Connecting to api.github.com...",
@@ -164,6 +179,21 @@ const I18N = {
         'aria.viewManage': "Ver ManageYourLife en GitHub (abre en pestaña nueva)",
         'aria.viewWatch': "Ver WhatToWatch en GitHub (abre en pestaña nueva)",
         'aria.viewBubble': "Ver Bubble Adventure en GitHub (abre en pestaña nueva)",
+        // TFG
+        'tfg.title': "Trabajo de Fin de Grado",
+        'tfg.boot': "> Cargando trabajo_fin_de_grado.md",
+        'tfg.badge': "Trabajo de Fin de Grado",
+        'tfg.grade': "Nota: 10",
+        'tfg.name': "Protección del jugador: la caja negra de la lógica",
+        'tfg.description': "Un Trabajo de Fin de Grado centrado en ciberseguridad aplicada a videojuegos. Analiza los riesgos de confiar en el dispositivo del jugador y propone un modelo de validación en servidor basado en computación distribuida y arquitectura cloud serverless.",
+        'tfg.point1': "> Traslada la validación de la lógica de juego desde el cliente a un backend seguro para reducir trampas, fraude de puntuaciones y manipulación de datos.",
+        'tfg.point2': "> Aplica <strong>AWS</strong>, servicios <strong>serverless</strong> y principios de computación distribuida para construir sistemas escalables y trazables.",
+        'tfg.point3': "> Define un marco reproducible para desarrollar videojuegos más seguros y sostenibles sin perder agilidad en la iteración.",
+        'tfg.download': "> Descargar TFG:",
+        'tfg.pdfEs': "TFG en Español",
+        'tfg.pdfEn': "TFG en Inglés",
+        'aria.downloadTfgEs': "Descargar TFG en Español",
+        'aria.downloadTfgEn': "Descargar TFG en Inglés",
         // GitHub
         'gh.title': "Actividad en GitHub",
         'gh.connecting': "> Conectando a api.github.com...",
@@ -727,32 +757,6 @@ function showFullscreenImage(src, alt = '') {
     overlay.querySelector('.close-fullscreen').focus();
 }
 
-// ─── #7 Cursor Trail (touch-safe) ────────────────────────────────────────────
-function initCursorTrail() {
-    // Skip entirely on touch-only devices — no mousemove, no memory waste
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-
-    const cursor = document.createElement('div');
-    cursor.className = 'cursor-trail';
-    cursor.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(cursor);
-
-    let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
-
-    // Single listener, no residual handlers on touch
-    const onMove = e => { mouseX = e.clientX; mouseY = e.clientY; };
-    window.addEventListener('mousemove', onMove, { passive: true });
-
-    const animate = () => {
-        cursorX += (mouseX - cursorX) * 0.1;
-        cursorY += (mouseY - cursorY) * 0.1;
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top  = cursorY + 'px';
-        requestAnimationFrame(animate);
-    };
-    animate();
-}
-
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     // Apply language BEFORE anything renders — the loader messages depend on it.
@@ -769,7 +773,6 @@ document.addEventListener('DOMContentLoaded', () => {
         initSmoothScroll();
         initActiveNav();
         handleSectionVisibility();
-        initCursorTrail();
         initBackToTop();
         loadGithubStats();
         syncNavHeightVar(); // re-measure now that final layout is settled
