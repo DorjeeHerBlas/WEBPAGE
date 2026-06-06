@@ -439,7 +439,7 @@ async function loadGithubStats() {
             'C++': '#f34b7d', 'C#': '#178600', 'Java': '#b07219',
             'Kotlin': '#A97BFF', 'Swift': '#ffac45', 'Python': '#3572A5',
             'JavaScript': '#f1e05a', 'HTML': '#e34c26', 'CSS': '#563d7c',
-            'C': '#555555', 'default': '#0ff'
+            'C': '#555555', 'default': '#3d7771'
         };
 
         document.getElementById('github-langs').innerHTML = `
